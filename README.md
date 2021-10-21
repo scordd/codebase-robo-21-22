@@ -5,8 +5,6 @@ Last year's code was messy, unorganized, and generally crappy. We're making some
 - Implementing Git and Github CLI into our workflows
 - We've also acquired 3 new Linux systems to aid in the development of the robot
 
-**A note to devs:** please refrain from directly committing to ``main``. Committing to a separate branch for us to then to revise it makes it much easier.
-
 > ⛔️ This is not a complete codebase. If you do use it, you agree to use it at your own risk.
 >  This code is meant for our own use, so we don't recommend other people using it.
 >  

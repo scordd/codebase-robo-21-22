@@ -5,7 +5,7 @@ Last year's code was messy, unorganized, and generally crappy. We're making some
 - Implementing Git and Github CLI into our workflows
 - We've also acquired 3 new Linux systems to aid in the development of the robot
 
-This year, we are adding the xbee moduale sofware to the code base, notably;
+This year, we are implementing the XBee module framework to the codebase, notably;
 - The code for the controller and receiver
 - The removal of automation from last year
 

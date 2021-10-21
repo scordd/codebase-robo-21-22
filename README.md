@@ -9,6 +9,8 @@ This year, we are implementing the XBee module framework to the codebase, notabl
 - The code for the controller and receiver
 - The removal of automation from last year
 
+*For devs:* https://github.com/scordd/codebase-robo-21-22/projects/1
+
 > ⛔️ This is not a complete codebase. If you do use it, you agree to use it at your own risk.
 >  This code is meant for our own use, so we don't recommend other people using it.
 >  

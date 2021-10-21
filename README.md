@@ -10,3 +10,4 @@ Last year's code was messy, unorganized, and generally crappy. We're making some
 >  This code is specific to the CRCduino and **WILL NOT** work with any other Arduino.
 
 **More to come soon.**
+https://robo-crc.ca/arcanum-2022/

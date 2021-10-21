@@ -1,1 +1,1 @@
-### Strucutre of the codebase ###
+### Structure of the codebase ###

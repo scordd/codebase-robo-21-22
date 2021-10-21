@@ -7,7 +7,9 @@ Last year's code was messy, unorganized, and generally crappy. We're making some
 
 > ⛔️ This is not a complete codebase. If you do use it, you agree to use it at your own risk.
 >  This code is meant for our own use, so we don't recommend other people using it.
+>  
 >  This code is specific to the CRCduino and **WILL NOT** work with any other Arduino.
 
 **More to come soon.**
+
 https://robo-crc.ca/arcanum-2022/

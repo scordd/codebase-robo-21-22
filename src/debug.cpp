@@ -2,6 +2,8 @@
 
 using namespace Crc;
 
+//debug code for crcduino
+
 void setup() {
     CrcLib::Initialize();
 

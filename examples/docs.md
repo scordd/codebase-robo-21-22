@@ -2,5 +2,5 @@ This file will be used to document all new components and functions to be used i
 
 - URM09 Ultrasonic Sensors (https://wiki.dfrobot.com/URM09_Ultrasonic_Sensor_Gravity_Trig_SKU_SEN0388)
 
-Ground, DIO
+Ground, DIO, 5v
 

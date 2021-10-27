@@ -4,7 +4,8 @@ This file will be used to document all new components and functions to be used i
 Ground, DIO
 Todo: convert docs code into CrcLib.
 
-```#define    VELOCITY_TEMP(temp)       ( ( 331.5 + 0.6 * (float)( temp ) ) * 100 / 1000000.0 ) // The ultrasonic velocity (cm/us) compensated by temperature
+```
+#define    VELOCITY_TEMP(temp)       ( ( 331.5 + 0.6 * (float)( temp ) ) * 100 / 1000000.0 ) // The ultrasonic velocity (cm/us) compensated by temperature
 
 int16_t trigechoPin = 11;
 uint16_t distance;
@@ -30,4 +31,5 @@ void loop() {
   Serial.print(distance, DEC);
   Serial.println("cm");
   delay(500);
-}```
+}
+```

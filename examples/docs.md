@@ -4,3 +4,6 @@ This file will be used to document all new components and functions to be used i
 
 Ground, DIO, 5v
 
+- Fiitec Servo (https://www.dummies.com/computers/arduino/how-to-spin-a-dc-motor-with-the-arduino/)
+
+PWM ez 

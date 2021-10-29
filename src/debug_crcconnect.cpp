@@ -4,7 +4,7 @@ using namespace Crc;
 
 void setup() {
   CrcLib::Initialize();
-  Serial.begin(2000000);
+  Serial.begin(9600);
 }
 
 

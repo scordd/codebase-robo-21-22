@@ -39,6 +39,9 @@ void setup() {
               MEASURE_RANG_500); // the measurement mode is set to passive mode,
                                  // measurement range is set to 500CM.
   i2cWriteBytes(addr0, CFG_INDEX, &txbuf[0], 1); //
+
+CrcLib::Update();
+
   delay(100);
 
   CrcLib::Update();

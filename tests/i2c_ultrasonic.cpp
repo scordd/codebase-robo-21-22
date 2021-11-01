@@ -31,7 +31,7 @@ typedef enum {
 unsigned char addr0 = 0x11;
 
 void setup() {
-  CrcLib.Initialize();
+  CrcLib::Initialize();
 
   Wire.begin();       // join i2c bus (addressa optional for master)
   Serial.begin(9600); // join i2c bus (address optional for master)
@@ -41,7 +41,7 @@ void setup() {
   i2cWriteBytes(addr0, CFG_INDEX, &txbuf[0], 1); //
   delay(100);
 
-  CrcLib.Update();
+  CrcLib::Update();
 }
 
 void i2cWriteBytes(unsigned char addr_t, unsigned char Reg,
@@ -72,7 +72,7 @@ void i2cReadBytes(unsigned char addr_t, unsigned char Reg, unsigned char Num) {
 
 unsigned char i = 0, x = 0;
 void loop() {
-  CrcLib.Update();
+  CrcLib::Update();
   int16_t dist, temp;
   txbuf[0] = CMD_DISTANCE_MEASURE;
 
@@ -80,7 +80,7 @@ void loop() {
                 1); // write register, send ranging command
   delay(100);
 
-  CrcLib.Update();
+  CrcLib::Update();
 
   i2cReadBytes(addr0, DIST_H_INDEX, 2); // read distance register
   dist = ((uint16_t)rxbuf[0] << 8) + rxbuf[1];

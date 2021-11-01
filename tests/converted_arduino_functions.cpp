@@ -1,10 +1,5 @@
 #include <CrcLib.h>
 
-digitalWrite(trigPin, HIGH);
-delayMicroseconds(10);
-digitalWrite(trigPin, LOW);
-// Reads the echoPin, returns the sound wave travel time in microseconds
-duration = pulseIn(echoPin, HIGH);
 
 
 int HC_SR04(int trigPin, int echoPin){
@@ -15,7 +10,9 @@ int HC_SR04(int trigPin, int echoPin){
 
     long duration; 
     int distance; 
-
+    
+    
+    
     digitalWrite(trigPin, LOW);
     delayMicroseconds(2);
     // Sets the trigPin on HIGH state for 10 micro seconds
@@ -23,6 +20,13 @@ int HC_SR04(int trigPin, int echoPin){
     delayMicroseconds(10);
     digitalWrite(trigPin, LOW);
     // Reads the echoPin, returns the sound wave travel time in microseconds
+    
+    
+    while(echoPin == LOW){
+       CrcLib::Update();
+       
+    }
+    
     duration = got - sent;
 
     distance = duration*0.034/2;

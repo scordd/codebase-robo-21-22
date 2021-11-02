@@ -3,14 +3,15 @@
 
 
 int HC_SR04(int trigPin, int echoPin){
-    CrcLib::Update();
 
     bool status = LOW;
+    bool state = LOW;
+    bool done = LOW;
     
-    unsigned long sent;
-    unsigned long got;
+    unsigned long start;
+    unsigned long stop;
 
-    long duration; 
+    unsigned long duration; 
     int distance; 
     
     digitalWrite(trigPin, LOW);
@@ -22,14 +23,24 @@ int HC_SR04(int trigPin, int echoPin){
     
     
     // Reads the echoPin, returns the sound wave travel time in microseconds
-    
-    
-    while(status == LOW){
-       CrcLib::Update();
-       digitalread()  
+    while(done == LOW){
+        
+        status = digitalread(echopPin);
+        
+        if(status == HIGH && state == LOW){
+            
+            start = micros();
+            state = HIGH;
+        }
+        else if(status == LOW && state == HIGH){
+            
+            stop = micros();
+            status = LOW;
+            state = LOW;
+            done = LOW;
+        } 
     }
-    
-    duration = got - sent;
+    duration = stop - start;
 
     distance = duration*0.034/2;
 

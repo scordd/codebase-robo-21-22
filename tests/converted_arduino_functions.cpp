@@ -37,11 +37,14 @@ int HC_SR04(int trigPin, int echoPin){
 int wait(int time){
     CrcLib::Update();
     
-    int x = time/5;
-
-    for(int i; i <= x; i++){
+    unsigned long x = millis(); 
+    unsigned long y = x + time;
+        
+    while(x < y){
         CrcLib::Update();
-        delay(5);
+        x = millis();
+        
     }
-
+        
+    return;    
 }

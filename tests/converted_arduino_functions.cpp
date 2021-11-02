@@ -36,10 +36,10 @@ int HC_SR04(int trigPin, int echoPin){
     return distance;
 }
 
-void wait(int time){
+void wait(int a){
   CrcLib::Update();
   unsigned long x = millis(); 
-  unsigned long y = x + time;
+  unsigned long y = x + a;
         
   while(x < y){
     CrcLib::Update();
@@ -48,10 +48,10 @@ void wait(int time){
             
 };
 
-void waitfast(int time){
+void waitfast(int a){
   CrcLib::Update();
   unsigned long x = micros(); 
-  unsigned long y = x + time;
+  unsigned long y = x + a;
         
   while(x < y){
     CrcLib::Update();

@@ -10,9 +10,9 @@ This year, we are implementing the XBee module framework to the codebase, notabl
 - The removal of automation from last year
 
 *For devs:* https://github.com/scordd/codebase-robo-21-22/projects/1
-- ```src```is meant for the final code to be run during the competition. You won't be needing until 2022. 
+- ```src``` is meant for the final code to be run during the competition.
 
-- ```tests``` 
+- ```tests``` is everything else that isn't final. Functions, libraries, and scripting tests.
 
 > ⛔️ This is not a complete codebase. If you do use it, you agree to use it at your own risk.
 >  This code is meant for our own use, so we don't recommend other people using it.

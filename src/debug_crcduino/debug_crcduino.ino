@@ -1,8 +1,9 @@
+// Debug code for CrcDuino
+
 #include <CrcLib.h>
 
 using namespace Crc;
 
-//debug code for crcduino
 
 void setup() {
     CrcLib::Initialize();

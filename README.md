@@ -15,8 +15,6 @@ This year, we are implementing the XBee module framework to the codebase, notabl
 
 - ```tests``` is everything else that isn't final. Functions, libraries, and scripting tests.
 
-- ```Standard``` is this year's library.
-
 > ⛔️ This is not a complete codebase. If you do use it, you agree to use it at your own risk.
 >  This code is meant for our own use, so we don't recommend other people using it.
 >  

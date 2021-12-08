@@ -13,7 +13,7 @@ void setup() {
 }
 void loop() {
     CrcLib::Update();
-)
+
     Serial.print("The code execution time is ");
     Serial.print(CrcLib::GetDeltaTimeMillis());
     Serial.println(" ms.");

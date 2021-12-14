@@ -9,6 +9,8 @@
 
 using namespace Crc;
 
+int mode = 1;
+
 void setup() {
   CrcLib::Initialize();
   Serial.begin(19200);
@@ -30,8 +32,13 @@ void loop() {
   {
     // Put ALL main code in here. This way, main.ino will only run if CrcConnect is online, connected and functional.
 
-  
-  
+    if (CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_L) == 1) {
+          mode = (mode - 1);
+      }
+    
+    if (CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_R) == 1) {
+          mode++;
+      }
 
 
 

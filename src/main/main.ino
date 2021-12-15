@@ -34,18 +34,45 @@ void loop()
     // Put ALL main code in here. This way, main.ino will only run if CrcConnect is online, connected and functional.
     int j1xpos = CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X);
     int j1ypos = CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y);
-    
+
+    int j2xpos = CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK2_X);
+    int j2ypos = CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK2_Y);
+
     int l1analog = CrcLib::ReadDigitalChannel(BUTTON::L1);
     int l2trigger = CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_L);
 
     int r1analog = CrcLib::ReadDigitalChannel(BUTTON::R1);
     int r2trigger = CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_R);
 
-    // if (j1xpos < -100) {
-
-    // }
-
-
+    int right = CrcLib::ReadDigitalChannel(BUTTON::COLORS_RIGHT);
+    int left = CrcLib::ReadDigitalChannel(BUTTON::COLORS_LEFT);
+    
+    if (right == 1) {
+      CrcLib::SetPwmOutput(LF, 50);
+      CrcLib::SetPwmOutput(BL, 50);
+      CrcLib::SetPwmOutput(RF, 50);
+      CrcLib::SetPwmOutput(BR, 50);
+    }
+    else if (right == 0) {
+      CrcLib::SetPwmOutput(LF, 0);
+      CrcLib::SetPwmOutput(BL, 0);
+      CrcLib::SetPwmOutput(RF, 0);
+      CrcLib::SetPwmOutput(BR, 0);
+    }
+    
+    if (left == 1) {
+      CrcLib::SetPwmOutput(LF, -50);
+      CrcLib::SetPwmOutput(BL, -50);
+      CrcLib::SetPwmOutput(RF, -50);
+      CrcLib::SetPwmOutput(BR, -50);
+    }
+    else if (right == 0) {
+      CrcLib::SetPwmOutput(LF, 0);
+      CrcLib::SetPwmOutput(BL, 0);
+      CrcLib::SetPwmOutput(RF, 0);
+      CrcLib::SetPwmOutput(BR, 0);
+    }
+    
 
 
   }

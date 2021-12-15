@@ -9,9 +9,10 @@
 
 using namespace Crc;
 
-int mode = 1;
+int mode = 1; // Focus on getting the robot to move for now, then we'll add modes.
 
-void setup() {
+void setup()
+{
   CrcLib::Initialize();
   Serial.begin(19200);
 
@@ -23,29 +24,33 @@ void setup() {
   CrcLib::InitializePwmOutput(ARM2);
 }
 
-
-void loop() {
+void loop()
+{
   CrcLib::Update();
   Serial.println();
 
   if (CrcLib::IsCommValid())
   {
     // Put ALL main code in here. This way, main.ino will only run if CrcConnect is online, connected and functional.
-
-    if (CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_L) == 1) {
-          mode = (mode - 1);
-      }
+    int j1xpos = CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X);
+    int j1ypos = CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y);
     
-    if (CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_R) == 1) {
-          mode++;
-      }
+    int l1analog = CrcLib::ReadDigitalChannel(BUTTON::L1);
+    int l2trigger = CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_L);
 
+    int r1analog = CrcLib::ReadDigitalChannel(BUTTON::R1);
+    int r2trigger = CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_R);
+
+    // if (j1xpos < -100) {
+
+    // }
 
 
 
 
   }
-  else {
+  else
+  {
     Serial.print("No controller connected, file will not work.");
     CrcLib::Update();
   }

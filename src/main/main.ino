@@ -50,11 +50,11 @@ void loop()
     CrcLib::Update();
     
     if (j1xpos != 0){
-      if (j1xpos < -50) {
-        left(50);
+      if (j2xpos < -50) {
+        turnl(50);
       }
-      else if (j1xpos > 50) {
-        right(50);
+      else if (j2xpos > 50) {
+        turnr(50);
       }
       else{
         done();
@@ -62,10 +62,10 @@ void loop()
     }
     
     if (j2ypos != 0){
-      if (j2ypos < -120){
+      if (j1ypos < -126){
          forward(50);
       }
-      else if(j2ypos > 120){
+      else if(j1ypos > 126){
          backward(50);
       }
     } 
@@ -97,7 +97,7 @@ void backward(int speed){
        CrcLib::Update();
 }  
 
-void right(int speed){
+void turnr(int speed){
        CrcLib::SetPwmOutput(LF, speed);
        CrcLib::SetPwmOutput(BL, speed);
        CrcLib::SetPwmOutput(RF, speed);
@@ -105,7 +105,7 @@ void right(int speed){
        CrcLib::Update();
 }
   
-void left(int speed){
+void turnl(int speed){
        CrcLib::SetPwmOutput(LF, -speed);
        CrcLib::SetPwmOutput(BL, -speed);
        CrcLib::SetPwmOutput(RF, -speed);

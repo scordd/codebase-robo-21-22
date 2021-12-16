@@ -51,42 +51,26 @@ void loop()
     
     if (j1xpos != 0){
       if (j1xpos < -50) {
-        CrcLib::SetPwmOutput(LF, 50);
-        CrcLib::SetPwmOutput(BL, 50);
-        CrcLib::SetPwmOutput(RF, 50);
-        CrcLib::SetPwmOutput(BR, 50);
-        CrcLib::Update();
+        left(50);
       }
       else if (j1xpos > 50) {
-        CrcLib::SetPwmOutput(LF, -50);
-        CrcLib::SetPwmOutput(BL, -50);
-        CrcLib::SetPwmOutput(RF, -50);
-        CrcLib::SetPwmOutput(BR, -50);
-        CrcLib::Update();
+        right(50);
       }
       else{
-        CrcLib::SetPwmOutput(LF, 0);
-        CrcLib::SetPwmOutput(BL, 0);
-        CrcLib::SetPwmOutput(RF, 0);
-        CrcLib::SetPwmOutput(BR, 0);
-        CrcLib::Update();
+        done();
       }
     }
     
     if (j2ypos != 0){
-    if (j2ypos < -120){
-       CrcLib::SetPwmOutput(LF, -50);
-       CrcLib::SetPwmOutput(BL, -50);
-       CrcLib::SetPwmOutput(RF, 50);
-       CrcLib::SetPwmOutput(BR, 50);
-       CrcLib::Update();
-    }
-    else if(j2ypos > 120){
-       CrcLib::SetPwmOutput(LF, 50);
-       CrcLib::SetPwmOutput(BL, 50);
-       CrcLib::SetPwmOutput(RF, -50);
-       CrcLib::SetPwmOutput(BR, -50);
-       CrcLib::Update();
+      if (j2ypos < -120){
+         forward(50);
+      }
+      else if(j2ypos > 120){
+         backward(50);
+      }
+    } 
+    else{
+      done();
     }
   }
   else
@@ -95,5 +79,45 @@ void loop()
     CrcLib::Update();
   }
 }
+  
+  
+void forward(int speed){
+       CrcLib::SetPwmOutput(LF, speed);
+       CrcLib::SetPwmOutput(BL, speed);
+       CrcLib::SetPwmOutput(RF, -speed);
+       CrcLib::SetPwmOutput(BR, -speed);
+       CrcLib::Update();
+}
 
+void backward(int speed){
+       CrcLib::SetPwmOutput(LF, -speed);
+       CrcLib::SetPwmOutput(BL, -speed);
+       CrcLib::SetPwmOutput(RF, speed);
+       CrcLib::SetPwmOutput(BR, speed);
+       CrcLib::Update();
+}  
+
+void right(int speed){
+       CrcLib::SetPwmOutput(LF, speed);
+       CrcLib::SetPwmOutput(BL, speed);
+       CrcLib::SetPwmOutput(RF, speed);
+       CrcLib::SetPwmOutput(BR, speed);
+       CrcLib::Update();
+}
+  
+void left(int speed){
+       CrcLib::SetPwmOutput(LF, -speed);
+       CrcLib::SetPwmOutput(BL, -speed);
+       CrcLib::SetPwmOutput(RF, -speed);
+       CrcLib::SetPwmOutput(BR, -speed);
+       CrcLib::Update();
+}
+
+void done(){
+       CrcLib::SetPwmOutput(LF, 0);
+       CrcLib::SetPwmOutput(BL, 0);
+       CrcLib::SetPwmOutput(RF, 0);
+       CrcLib::SetPwmOutput(BR, 0);
+       CrcLib::Update();
+}
 // Functions here? Or maybe a library....

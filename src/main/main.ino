@@ -73,7 +73,21 @@ void loop()
       }
     }
     
-    
+    if (j2ypos != 0){
+    if (j2ypos < -120){
+       CrcLib::SetPwmOutput(LF, -50);
+       CrcLib::SetPwmOutput(BL, -50);
+       CrcLib::SetPwmOutput(RF, 50);
+       CrcLib::SetPwmOutput(BR, 50);
+       CrcLib::Update();
+    }
+    else if(j2ypos > 120){
+       CrcLib::SetPwmOutput(LF, 50);
+       CrcLib::SetPwmOutput(BL, 50);
+       CrcLib::SetPwmOutput(RF, -50);
+       CrcLib::SetPwmOutput(BR, -50);
+       CrcLib::Update();
+    }
   }
   else
   {

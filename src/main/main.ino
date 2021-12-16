@@ -47,34 +47,33 @@ void loop()
     int right = CrcLib::ReadDigitalChannel(BUTTON::COLORS_RIGHT);
     int left = CrcLib::ReadDigitalChannel(BUTTON::COLORS_LEFT);
     
-    if (right == 1) {
-      CrcLib::SetPwmOutput(LF, 50);
-      CrcLib::SetPwmOutput(BL, 50);
-      CrcLib::SetPwmOutput(RF, 50);
-      CrcLib::SetPwmOutput(BR, 50);
-    }
-    else if (right == 0) {
-      CrcLib::SetPwmOutput(LF, 0);
-      CrcLib::SetPwmOutput(BL, 0);
-      CrcLib::SetPwmOutput(RF, 0);
-      CrcLib::SetPwmOutput(BR, 0);
+    CrcLib::Update();
+    
+    if (j1xpos != 0){
+      if (j1xpos < -50) {
+        CrcLib::SetPwmOutput(LF, 50);
+        CrcLib::SetPwmOutput(BL, 50);
+        CrcLib::SetPwmOutput(RF, 50);
+        CrcLib::SetPwmOutput(BR, 50);
+        CrcLib::Update();
+      }
+      else if (j1xpos > 50) {
+        CrcLib::SetPwmOutput(LF, -50);
+        CrcLib::SetPwmOutput(BL, -50);
+        CrcLib::SetPwmOutput(RF, -50);
+        CrcLib::SetPwmOutput(BR, -50);
+        CrcLib::Update();
+      }
+      else{
+        CrcLib::SetPwmOutput(LF, 0);
+        CrcLib::SetPwmOutput(BL, 0);
+        CrcLib::SetPwmOutput(RF, 0);
+        CrcLib::SetPwmOutput(BR, 0);
+        CrcLib::Update();
+      }
     }
     
-    if (left == 1) {
-      CrcLib::SetPwmOutput(LF, -50);
-      CrcLib::SetPwmOutput(BL, -50);
-      CrcLib::SetPwmOutput(RF, -50);
-      CrcLib::SetPwmOutput(BR, -50);
-    }
-    else if (right == 0) {
-      CrcLib::SetPwmOutput(LF, 0);
-      CrcLib::SetPwmOutput(BL, 0);
-      CrcLib::SetPwmOutput(RF, 0);
-      CrcLib::SetPwmOutput(BR, 0);
-    }
     
-
-
   }
   else
   {

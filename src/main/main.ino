@@ -121,7 +121,7 @@ void turnl(int speed){
        CrcLib::Update();
 }
 
-void latl(int speed){
+void latr(int speed){
        CrcLib::SetPwmOutput(LF, speed);
        CrcLib::SetPwmOutput(BL, -speed);
        CrcLib::SetPwmOutput(RF, -speed);
@@ -129,7 +129,7 @@ void latl(int speed){
        CrcLib::Update();
 }
 
-void latr(int speed){
+void latl(int speed){
        CrcLib::SetPwmOutput(LF, -speed);
        CrcLib::SetPwmOutput(BL, speed);
        CrcLib::SetPwmOutput(RF, speed);

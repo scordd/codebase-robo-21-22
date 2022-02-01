@@ -49,15 +49,15 @@ void loop()
     
     CrcLib::Update();
     
-    if (j2xpos == 0 && j1ypos == 0){
+    if (j2xpos == 0 && j1ypos == 0 && l2trigger == 0 && r2trigger == 0){
       done();  
     }
     
-    if (j2xpos != 0){
-      if (j2xpos < -50) {
+    if (l2trigger != 0 || r2trigger != 0){
+      if (l2trigger < 50) {
         turnl(100);
       }
-      else if (j2xpos > 50) {
+      else if (r2trigger < 50) {
         turnr(100);
       }
     }
@@ -69,12 +69,12 @@ void loop()
       else if(j1ypos > 126){
          backward(100);
       }
-      if (j1xpos < -126){
-         latl(100);
-      }
-      else if(j1xpos > 126){
-         latr(100);
-      }
+//       if (j1xpos < -126){
+//          latl(100);
+//       }
+//       else if(j1xpos > 126){
+//          latr(100);
+//       }
     }
 
 

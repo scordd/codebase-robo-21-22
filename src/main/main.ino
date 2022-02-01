@@ -144,4 +144,28 @@ void done(){
        CrcLib::SetPwmOutput(BR, 0);
        CrcLib::Update();
 }
+
+void wait(int a){
+  CrcLib::Update();
+  unsigned long x = millis(); 
+  unsigned long y = x + a;
+        
+  while(x < y){
+    CrcLib::Update();
+    x = millis();
+  };
+            
+};
+
+void waitfast(int a){
+  CrcLib::Update();
+  unsigned long x = micros(); 
+  unsigned long y = x + a;
+        
+  while(x < y){
+    CrcLib::Update();
+    x = micros();
+  };
+            
+};
 // Functions here? Or maybe a library....

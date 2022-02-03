@@ -1,4 +1,4 @@
-#include <CrcLib.h>
+##include <CrcLib.h>
 
 #define LF CRC_PWM_1
 #define RF CRC_PWM_2
@@ -56,6 +56,10 @@ void loop()
     bool left = CrcLib::ReadDigitalChannel(BUTTON::ARROW_LEFT);
     bool down = CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN);
 
+    right = false;
+    left = false;
+    down = false;
+
     CrcLib::Update();
 
     // END ALL TRANSMISSION FROM JOYSTICKS AND L2 R2 TRIGGERS
@@ -90,15 +94,16 @@ void loop()
       }
     }
 
+
     // Servo control
-    if (left == HIGH || right == HIGH || down == HIGH) {
-      if (left == HIGH) {
+    if (left == true || right == true || down == true) {
+      if (left == true) {
         CrcLib::InitializePwmOutput(Servo12inch, 10);
       }
-      else if (right == HIGH) {
+      else if (right == true) {
         CrcLib::InitializePwmOutput(Servo16inch, 10);
       }
-      else if (down == HIGH) {
+      else if (down == true) {
         CrcLib::InitializePwmOutput(Servo24inch, 10);
       }
     }

@@ -1,4 +1,4 @@
-##include <CrcLib.h>
+#include <CrcLib.h>
 
 #define LF CRC_PWM_1
 #define RF CRC_PWM_2
@@ -7,7 +7,7 @@
 #define ARM1 CRC_PWM_5
 #define ARM2 CRC_PWM_6
 #define Servo12inch CRC_PWM_7
-#define Servo18inch CRC_PWM_8
+#define Servo16inch CRC_PWM_8
 #define Servo24inch CRC_PWM_9
 
 using namespace Crc;
@@ -28,7 +28,7 @@ void setup()
   CrcLib::InitializePwmOutput(ARM2);
 
   CrcLib::InitializePwmOutput(Servo12inch);
-  CrcLib::InitializePwmOutput(Servo18inch);
+  CrcLib::InitializePwmOutput(Servo16inch);
   CrcLib::InitializePwmOutput(Servo24inch);
 }
 
@@ -67,7 +67,7 @@ void loop()
       done();
     }
 
-    // Tank drive forward-backward (LF, BL, RF, BR)
+    // Tank drive forward-backward rotation (LF, BL, RF, BR) (Jacques)
     if (l2trigger != -128 || r2trigger != -128) {
       if (l2trigger < -100) {
         turnl(100);
@@ -77,7 +77,7 @@ void loop()
       }
     }
 
-    // Lateral movement/rotation
+    // Lateral movement/rotation (Thomas)
     if (j1ypos != 0 || j1xpos != 0) {
 
       if (j1ypos < -126) {
@@ -95,7 +95,7 @@ void loop()
     }
 
 
-    // Servo control
+    // Servo control (Sava)
     if (left == true || right == true || down == true) {
       if (left == true) {
         CrcLib::InitializePwmOutput(Servo12inch, 10);

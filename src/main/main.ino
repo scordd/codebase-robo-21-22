@@ -52,14 +52,14 @@ void loop()
     int r1analog = CrcLib::ReadDigitalChannel(BUTTON::R1);
     int r2trigger = CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_R);
 
-    bool 12inch  = CrcLib::ReadDigitalChannel(BUTTON::ARROW_RIGHT);
-    bool 18inch = CrcLib::ReadDigitalChannel(BUTTON::ARROW_LEFT);
-    bool 24inch = CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN);
-    
+    bool inch12  = CrcLib::ReadDigitalChannel(BUTTON::ARROW_RIGHT);
+    bool inch18 = CrcLib::ReadDigitalChannel(BUTTON::ARROW_LEFT);
+    bool inch24 = CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN);
+
     CrcLib::Update();
 
     // END ALL TRANSMISSION FROM JOYSTICKS AND L2 R2 TRIGGERS
-    if (j2xpos == 0 && j1ypos == 0 || l2trigger == -128 && r2trigger == -128 || left == LOW && right == LOW && down == LOW) {
+    if (j2xpos == 0 && j1ypos == 0 || l2trigger == -128 && r2trigger == -128) {
       done();
     }
 
@@ -92,41 +92,41 @@ void loop()
 
 
 
-      if (12inch == true) {
-        CrcLib::InitializePwmOutput(Servo12inch, 127);
-        CrcLib::Update();
-      }
-      else{
-        CrcLib::InitializePwmOutput(Servo12inch, -127);
-        state12 = false;
-        CrcLib::Update();
-      } 
-      if (18inch == true) {
-        CrcLib::InitializePwmOutput(Servo16inch, 127);
-        CrcLib::Update();
-      }
-      else{
-        CrcLib::InitializePwmOutput(Servo12inch, -127);
-        state18 = false;
-        CrcLib::Update();
-      } 
-      else if (24inch == true) {
-        CrcLib::InitializePwmOutput(Servo24inch, 127);
-        CrcLib::Update();
-      }
-      else{
-        CrcLib::InitializePwmOutput(Servo12inch, -127);
-        state24 = false;
-        CrcLib::Update();
-      } 
+    if (inch12 == true) {
+      CrcLib::InitializePwmOutput(Servo12inch, 127);
+      CrcLib::Update();
+    }
+    else {
+      CrcLib::InitializePwmOutput(Servo12inch, -127);
+      CrcLib::Update();
+    }
+
+    
+    if (inch18 == true) {
+      CrcLib::InitializePwmOutput(Servo18inch, 127);
+      CrcLib::Update();
+    }
+    else {
+      CrcLib::InitializePwmOutput(Servo18inch, -127);
+      CrcLib::Update();
+    }
+    
+    if (inch24 == true) {
+      CrcLib::InitializePwmOutput(Servo24inch, 127);
+      CrcLib::Update();
+    }
+    else {
+      CrcLib::InitializePwmOutput(Servo24inch, -127);
+      CrcLib::Update();
+    }
 
 
-    else
-    {
+    
+  }
+  else {
       Serial.print("No controller connected, file will not work.");
       CrcLib::Update();
     }
-  }
 }
 
 

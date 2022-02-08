@@ -67,7 +67,7 @@ void loop()
       done();
     }
 
-    // Tank drive forward-backward rotation (LF, BL, RF, BR) (Jacques)
+    // tank drive/precise rotation (LF, BL, RF, BR) (Jacques)
     if (l2trigger != -128 || r2trigger != -128) {
       if (l2trigger < -100) {
         turnl(100);
@@ -77,7 +77,7 @@ void loop()
       }
     }
 
-    // Lateral movement/rotation (Thomas)
+    // lateral omniwheel movement forward-backward-left-right
     if (j1ypos != 0 || j1xpos != 0) {
 
       if (j1ypos < -126) {
@@ -93,7 +93,6 @@ void loop()
         latr(100);
       }
     }
-
 
     // Servo control (Sava)
     if (left == true || right == true || down == true) {
@@ -116,7 +115,7 @@ void loop()
   }
 }
 
-
+  // omniwheel movement
 void forward(int speed) {
   CrcLib::SetPwmOutput(LF, speed);
   CrcLib::SetPwmOutput(BL, speed);
@@ -130,22 +129,6 @@ void backward(int speed) {
   CrcLib::SetPwmOutput(BL, -speed);
   CrcLib::SetPwmOutput(RF, speed);
   CrcLib::SetPwmOutput(BR, speed);
-  CrcLib::Update();
-}
-
-void turnr(int speed) {
-  CrcLib::SetPwmOutput(LF, speed);
-  CrcLib::SetPwmOutput(BL, speed);
-  CrcLib::SetPwmOutput(RF, speed);
-  CrcLib::SetPwmOutput(BR, speed);
-  CrcLib::Update();
-}
-
-void turnl(int speed) {
-  CrcLib::SetPwmOutput(LF, -speed);
-  CrcLib::SetPwmOutput(BL, -speed);
-  CrcLib::SetPwmOutput(RF, -speed);
-  CrcLib::SetPwmOutput(BR, -speed);
   CrcLib::Update();
 }
 
@@ -165,6 +148,28 @@ void latl(int speed) {
   CrcLib::Update();
 }
 
+
+// tank drive rotation/precise rotation
+void turnr(int speed) {
+  CrcLib::SetPwmOutput(LF, speed);
+  CrcLib::SetPwmOutput(BL, speed);
+  CrcLib::SetPwmOutput(RF, speed);
+  CrcLib::SetPwmOutput(BR, speed);
+  CrcLib::Update();
+}
+
+void turnl(int speed) {
+  CrcLib::SetPwmOutput(LF, -speed);
+  CrcLib::SetPwmOutput(BL, -speed);
+  CrcLib::SetPwmOutput(RF, -speed);
+  CrcLib::SetPwmOutput(BR, -speed);
+  CrcLib::Update();
+}
+
+
+
+
+// done + other functions
 void done() {
   CrcLib::SetPwmOutput(LF, 0);
   CrcLib::SetPwmOutput(BL, 0);

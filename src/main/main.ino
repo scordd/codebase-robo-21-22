@@ -52,13 +52,13 @@ void loop()
     int r1analog = CrcLib::ReadDigitalChannel(BUTTON::R1);
     int r2trigger = CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_R);
 
-    bool right = CrcLib::ReadDigitalChannel(BUTTON::ARROW_RIGHT);
-    bool left = CrcLib::ReadDigitalChannel(BUTTON::ARROW_LEFT);
-    bool down = CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN);
-
-    right = false;
-    left = false;
-    down = false;
+    bool 12inch  = CrcLib::ReadDigitalChannel(BUTTON::ARROW_RIGHT);
+    bool 18inch = CrcLib::ReadDigitalChannel(BUTTON::ARROW_LEFT);
+    bool 24inch = CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN);
+    
+    bool state12 = false;
+    bool state18 = false;
+    bool state24 = false; 
 
     CrcLib::Update();
 
@@ -95,18 +95,29 @@ void loop()
     }
 
 
-    // Servo control (Sava)
-    if (left == true || right == true || down == true) {
-      if (left == true) {
-        CrcLib::InitializePwmOutput(Servo12inch, 10);
+
+      if (12inch == true) {
+        CrcLib::InitializePwmOutput(Servo12inch, 127);
       }
-      else if (right == true) {
-        CrcLib::InitializePwmOutput(Servo16inch, 10);
+      else{
+        CrcLib::InitializePwmOutput(Servo12inch, -127);
+        state12 = false;
+      } 
+      if (18inch == true) {
+        CrcLib::InitializePwmOutput(Servo16inch, 127);
       }
-      else if (down == true) {
-        CrcLib::InitializePwmOutput(Servo24inch, 10);
+      else{
+        CrcLib::InitializePwmOutput(Servo12inch, -127);
+        state18 = false;
+      } 
+      else if (24inch == true) {
+        CrcLib::InitializePwmOutput(Servo24inch, 127);
       }
-    }
+      else{
+        CrcLib::InitializePwmOutput(Servo12inch, -127);
+        state24 = false;
+      } 
+
 
     else
     {

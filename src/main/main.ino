@@ -56,10 +56,6 @@ void loop()
     bool 18inch = CrcLib::ReadDigitalChannel(BUTTON::ARROW_LEFT);
     bool 24inch = CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN);
     
-    bool state12 = false;
-    bool state18 = false;
-    bool state24 = false; 
-
     CrcLib::Update();
 
     // END ALL TRANSMISSION FROM JOYSTICKS AND L2 R2 TRIGGERS
@@ -98,24 +94,30 @@ void loop()
 
       if (12inch == true) {
         CrcLib::InitializePwmOutput(Servo12inch, 127);
+        CrcLib::Update();
       }
       else{
         CrcLib::InitializePwmOutput(Servo12inch, -127);
         state12 = false;
+        CrcLib::Update();
       } 
       if (18inch == true) {
         CrcLib::InitializePwmOutput(Servo16inch, 127);
+        CrcLib::Update();
       }
       else{
         CrcLib::InitializePwmOutput(Servo12inch, -127);
         state18 = false;
+        CrcLib::Update();
       } 
       else if (24inch == true) {
         CrcLib::InitializePwmOutput(Servo24inch, 127);
+        CrcLib::Update();
       }
       else{
         CrcLib::InitializePwmOutput(Servo12inch, -127);
         state24 = false;
+        CrcLib::Update();
       } 
 
 

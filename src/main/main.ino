@@ -7,7 +7,7 @@
 #define ARM1 CRC_PWM_5
 #define ARM2 CRC_PWM_6
 #define Servo12inch CRC_PWM_7
-#define Servo16inch CRC_PWM_8
+#define Servo18inch CRC_PWM_8
 #define Servo24inch CRC_PWM_9
 
 using namespace Crc;
@@ -28,7 +28,7 @@ void setup()
   CrcLib::InitializePwmOutput(ARM2);
 
   CrcLib::InitializePwmOutput(Servo12inch);
-  CrcLib::InitializePwmOutput(Servo16inch);
+  CrcLib::InitializePwmOutput(Servo18inch);
   CrcLib::InitializePwmOutput(Servo24inch);
 }
 
@@ -52,14 +52,10 @@ void loop()
     int r1analog = CrcLib::ReadDigitalChannel(BUTTON::R1);
     int r2trigger = CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_R);
 
-    bool right = CrcLib::ReadDigitalChannel(BUTTON::ARROW_RIGHT);
-    bool left = CrcLib::ReadDigitalChannel(BUTTON::ARROW_LEFT);
-    bool down = CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN);
-
-    right = false;
-    left = false;
-    down = false;
-
+    bool 12inch  = CrcLib::ReadDigitalChannel(BUTTON::ARROW_RIGHT);
+    bool 18inch = CrcLib::ReadDigitalChannel(BUTTON::ARROW_LEFT);
+    bool 24inch = CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN);
+    
     CrcLib::Update();
 
     // END ALL TRANSMISSION FROM JOYSTICKS AND L2 R2 TRIGGERS
@@ -67,7 +63,7 @@ void loop()
       done();
     }
 
-    // tank drive/precise rotation (LF, BL, RF, BR) (Jacques)
+    // Tank drive forward-backward rotation (LF, BL, RF, BR) (Jacques)
     if (l2trigger != -128 || r2trigger != -128) {
       if (l2trigger < -100) {
         turnl(100);
@@ -77,7 +73,7 @@ void loop()
       }
     }
 
-    // lateral omniwheel movement forward-backward-left-right
+    // Lateral movement/rotation (Thomas)
     if (j1ypos != 0 || j1xpos != 0) {
 
       if (j1ypos < -126) {
@@ -94,18 +90,36 @@ void loop()
       }
     }
 
-    // Servo control (Sava)
-    if (left == true || right == true || down == true) {
-      if (left == true) {
-        CrcLib::InitializePwmOutput(Servo12inch, 10);
+
+
+      if (12inch == true) {
+        CrcLib::InitializePwmOutput(Servo12inch, 127);
+        CrcLib::Update();
       }
-      else if (right == true) {
-        CrcLib::InitializePwmOutput(Servo16inch, 10);
+      else{
+        CrcLib::InitializePwmOutput(Servo12inch, -127);
+        state12 = false;
+        CrcLib::Update();
+      } 
+      if (18inch == true) {
+        CrcLib::InitializePwmOutput(Servo16inch, 127);
+        CrcLib::Update();
       }
-      else if (down == true) {
-        CrcLib::InitializePwmOutput(Servo24inch, 10);
+      else{
+        CrcLib::InitializePwmOutput(Servo12inch, -127);
+        state18 = false;
+        CrcLib::Update();
+      } 
+      else if (24inch == true) {
+        CrcLib::InitializePwmOutput(Servo24inch, 127);
+        CrcLib::Update();
       }
-    }
+      else{
+        CrcLib::InitializePwmOutput(Servo12inch, -127);
+        state24 = false;
+        CrcLib::Update();
+      } 
+
 
     else
     {
@@ -115,7 +129,7 @@ void loop()
   }
 }
 
-  // omniwheel movement
+
 void forward(int speed) {
   CrcLib::SetPwmOutput(LF, speed);
   CrcLib::SetPwmOutput(BL, speed);
@@ -129,6 +143,22 @@ void backward(int speed) {
   CrcLib::SetPwmOutput(BL, -speed);
   CrcLib::SetPwmOutput(RF, speed);
   CrcLib::SetPwmOutput(BR, speed);
+  CrcLib::Update();
+}
+
+void turnr(int speed) {
+  CrcLib::SetPwmOutput(LF, speed);
+  CrcLib::SetPwmOutput(BL, speed);
+  CrcLib::SetPwmOutput(RF, speed);
+  CrcLib::SetPwmOutput(BR, speed);
+  CrcLib::Update();
+}
+
+void turnl(int speed) {
+  CrcLib::SetPwmOutput(LF, -speed);
+  CrcLib::SetPwmOutput(BL, -speed);
+  CrcLib::SetPwmOutput(RF, -speed);
+  CrcLib::SetPwmOutput(BR, -speed);
   CrcLib::Update();
 }
 
@@ -148,28 +178,6 @@ void latl(int speed) {
   CrcLib::Update();
 }
 
-
-// tank drive rotation/precise rotation
-void turnr(int speed) {
-  CrcLib::SetPwmOutput(LF, speed);
-  CrcLib::SetPwmOutput(BL, speed);
-  CrcLib::SetPwmOutput(RF, speed);
-  CrcLib::SetPwmOutput(BR, speed);
-  CrcLib::Update();
-}
-
-void turnl(int speed) {
-  CrcLib::SetPwmOutput(LF, -speed);
-  CrcLib::SetPwmOutput(BL, -speed);
-  CrcLib::SetPwmOutput(RF, -speed);
-  CrcLib::SetPwmOutput(BR, -speed);
-  CrcLib::Update();
-}
-
-
-
-
-// done + other functions
 void done() {
   CrcLib::SetPwmOutput(LF, 0);
   CrcLib::SetPwmOutput(BL, 0);

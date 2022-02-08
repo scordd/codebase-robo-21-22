@@ -7,7 +7,7 @@
 #define ARM1 CRC_PWM_5
 #define ARM2 CRC_PWM_6
 #define Servo12inch CRC_PWM_7
-#define Servo16inch CRC_PWM_8
+#define Servo18inch CRC_PWM_8
 #define Servo24inch CRC_PWM_9
 
 using namespace Crc;
@@ -28,7 +28,7 @@ void setup()
   CrcLib::InitializePwmOutput(ARM2);
 
   CrcLib::InitializePwmOutput(Servo12inch);
-  CrcLib::InitializePwmOutput(Servo16inch);
+  CrcLib::InitializePwmOutput(Servo18inch);
   CrcLib::InitializePwmOutput(Servo24inch);
 }
 

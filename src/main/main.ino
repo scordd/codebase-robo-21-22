@@ -65,10 +65,10 @@ void loop()
 
     // Tank drive forward-backward rotation (LF, BL, RF, BR) (Jacques)
     if (l2trigger != -128 || r2trigger != -128) {
-      if (l2trigger < -110) {
+      if (l2trigger < 120) {
         turnl(CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_L));
       }
-      else if (r2trigger < -110) {
+      else if (r2trigger < -120) {
         turnr(CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_R));
       }
     }

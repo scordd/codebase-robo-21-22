@@ -7,7 +7,7 @@
 #define ARM1 CRC_PWM_5
 #define ARM2 CRC_PWM_6
 #define Servo12inch CRC_PWM_7
-#define Servo18inch CRC_PWM_8
+#define Servo16inch CRC_PWM_8
 #define Servo24inch CRC_PWM_9
 
 using namespace Crc;
@@ -17,7 +17,7 @@ int mode = 1; // Focus on getting the robot to move for now, then we'll add mode
 void setup()
 {
   CrcLib::Initialize();
-  Serial.begin(9200);
+  Serial.begin(9600);
 
   CrcLib::InitializePwmOutput(LF);
   CrcLib::InitializePwmOutput(RF);
@@ -28,7 +28,7 @@ void setup()
   CrcLib::InitializePwmOutput(ARM2);
 
   CrcLib::InitializePwmOutput(Servo12inch);
-  CrcLib::InitializePwmOutput(Servo18inch);
+  CrcLib::InitializePwmOutput(Servo16inch);
   CrcLib::InitializePwmOutput(Servo24inch);
 }
 
@@ -52,9 +52,9 @@ void loop()
     int r1analog = CrcLib::ReadDigitalChannel(BUTTON::R1);
     int r2trigger = CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_R);
 
-    bool inch12  = CrcLib::ReadDigitalChannel(BUTTON::ARROW_RIGHT);
-    bool inch18 = CrcLib::ReadDigitalChannel(BUTTON::ARROW_LEFT);
-    bool inch24 = CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN);
+    int inch12  = CrcLib::ReadDigitalChannel(BUTTON::ARROW_RIGHT);
+    int inch16 = CrcLib::ReadDigitalChannel(BUTTON::ARROW_LEFT);
+    int inch24 = CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN);
 
     CrcLib::Update();
 
@@ -65,11 +65,11 @@ void loop()
 
     // Tank drive forward-backward rotation (LF, BL, RF, BR) (Jacques)
     if (l2trigger != -128 || r2trigger != -128) {
-      if (l2trigger < -100) {
-        turnl(100);
+      if (l2trigger < -110) {
+        turnl(CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_L));
       }
-      else if (r2trigger < -100) {
-        turnr(100);
+      else if (r2trigger < -110) {
+        turnr(CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_R));
       }
     }
 
@@ -92,41 +92,44 @@ void loop()
 
 
 
-    if (inch12 == true) {
-      CrcLib::InitializePwmOutput(Servo12inch, 127);
+    if (inch12 == 1) {
+      CrcLib::SetPwmOutput(Servo12inch, 127);
       CrcLib::Update();
+      Serial.println("New set servo");
     }
     else {
-      CrcLib::InitializePwmOutput(Servo12inch, -127);
+      CrcLib::SetPwmOutput(Servo12inch, -127);
       CrcLib::Update();
+      Serial.println("No set");
     }
 
-    
-    if (inch18 == true) {
-      CrcLib::InitializePwmOutput(Servo18inch, 127);
+    if (inch16 == 1) {
+      CrcLib::SetPwmOutput(Servo16inch, 127);
       CrcLib::Update();
+      Serial.println("New set servo");
     }
     else {
-      CrcLib::InitializePwmOutput(Servo18inch, -127);
+      CrcLib::SetPwmOutput(Servo16inch, -127);
       CrcLib::Update();
+      Serial.println("No set");
     }
-    
-    if (inch24 == true) {
-      CrcLib::InitializePwmOutput(Servo24inch, 127);
+
+    if (inch24 == 1) {
+      CrcLib::SetPwmOutput(Servo24inch, 127);
       CrcLib::Update();
+      Serial.println("New set servo");
     }
     else {
-      CrcLib::InitializePwmOutput(Servo24inch, -127);
+      CrcLib::SetPwmOutput(Servo24inch, -127);
       CrcLib::Update();
+      Serial.println("No set");
     }
 
-
-    
   }
   else {
-      Serial.print("No controller connected, file will not work.");
-      CrcLib::Update();
-    }
+    Serial.print("No controller connected, file will not work.");
+    CrcLib::Update();
+  }
 }
 
 

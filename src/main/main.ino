@@ -13,7 +13,7 @@
 
 using namespace Crc;
 
-int mode = 1; // Focus on getting the robot to move for now, then we'll add modes.
+int mode = 3; // Focus on getting the robot to move for now, then we'll add modes.
 
 bool armstate = HIGH; 
 
@@ -65,7 +65,7 @@ void loop()
     int inch24 = CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN);
 
     CrcLib::Update();
-
+    
     // END ALL TRANSMISSION FROM JOYSTICKS AND L2 R2 TRIGGERS
     if (j2xpos == 0 && j1ypos == 0 || l2trigger == -128 && r2trigger == -128) {
       done();

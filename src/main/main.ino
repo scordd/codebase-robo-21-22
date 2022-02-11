@@ -4,7 +4,8 @@
 #define RF CRC_PWM_2
 #define BL CRC_PWM_3
 #define BR CRC_PWM_4
-#define ARM1 CRC_PWM_5
+#define ARM1.A CRC_PWM_10
+#define ARM1.B CRC_PWM_11
 #define ARM2 CRC_PWM_6
 #define Servo12inch CRC_PWM_7
 #define Servo16inch CRC_PWM_8
@@ -13,6 +14,10 @@
 using namespace Crc;
 
 int mode = 1; // Focus on getting the robot to move for now, then we'll add modes.
+
+bool armstate = HIGH; 
+
+unsigned long x = 0;
 
 void setup()
 {
@@ -24,7 +29,8 @@ void setup()
   CrcLib::InitializePwmOutput(BL);
   CrcLib::InitializePwmOutput(BR);
 
-  CrcLib::InitializePwmOutput(ARM1);
+  CrcLib::InitializePwmOutput(ARM1.A);
+  CrcLib::InitializePwmOutput(ARM1.B);
   CrcLib::InitializePwmOutput(ARM2);
 
   CrcLib::InitializePwmOutput(Servo12inch);
@@ -51,7 +57,9 @@ void loop()
 
     int r1analog = CrcLib::ReadDigitalChannel(BUTTON::R1);
     int r2trigger = CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_R);
-
+    
+    bool PVC = // Choosse a button on the remote after more testing 
+    
     int inch12  = CrcLib::ReadDigitalChannel(BUTTON::ARROW_RIGHT);
     int inch16 = CrcLib::ReadDigitalChannel(BUTTON::ARROW_LEFT);
     int inch24 = CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN);
@@ -90,7 +98,25 @@ void loop()
       }
     }
 
-
+    if(PVC == 1) {
+      unsigned long y = millis();
+      unsigned long z = y - x;
+      done();
+      if (z > 500){
+        if (armstate == HIGH){
+          CrcLib::SetPwmOutput(ARM1.A, 127);
+          CrcLib::SetPwmOutput(ARM1.B, -127);
+          CrcLib::Update();
+        }
+        else if (arm state == LOW){
+          CrcLib::SetPwmOutput(ARM1.A, -127);
+          CrcLib::SetPwmOutput(ARM1.B, 127);
+          CrcLib::Update(); 
+        }
+        unsigned long x = millis();
+        CrcLib::Update();
+      }
+    }
 
     if (inch12 == 1) {
       CrcLib::SetPwmOutput(Servo12inch, 127);

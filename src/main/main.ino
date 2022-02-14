@@ -4,8 +4,8 @@
 #define RF CRC_PWM_2
 #define BL CRC_PWM_3
 #define BR CRC_PWM_4
-#define ARM1.A CRC_PWM_10
-#define ARM1.B CRC_PWM_11
+#define ARM1_A CRC_PWM_10
+#define ARM1_B CRC_PWM_11
 #define ARM2 CRC_PWM_6
 #define Servo12inch CRC_PWM_7
 #define Servo16inch CRC_PWM_8
@@ -13,7 +13,11 @@
 
 using namespace Crc;
 
-int mode = 3; // Focus on getting the robot to move for now, then we'll add modes.
+int mode = 0;
+
+int speed = 0;
+
+int modes[] = {0, 25, 50, 100, 127}; // 4 modes: potentiometer (as 0), low, medium, high, ultra-high
 
 bool armstate = HIGH; 
 
@@ -29,8 +33,8 @@ void setup()
   CrcLib::InitializePwmOutput(BL);
   CrcLib::InitializePwmOutput(BR);
 
-  CrcLib::InitializePwmOutput(ARM1.A);
-  CrcLib::InitializePwmOutput(ARM1.B);
+  CrcLib::InitializePwmOutput(ARM1_A);
+  CrcLib::InitializePwmOutput(ARM1_B);
   CrcLib::InitializePwmOutput(ARM2);
 
   CrcLib::InitializePwmOutput(Servo12inch);
@@ -46,6 +50,9 @@ void loop()
   if (CrcLib::IsCommValid())
   {
     // Put ALL main code in here. This way, main.ino will only run if CrcConnect is online, connected and functional.
+
+    speed = modes[mode];
+
     int j1xpos = CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X);
     int j1ypos = CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y);
 
@@ -58,7 +65,7 @@ void loop()
     int r1analog = CrcLib::ReadDigitalChannel(BUTTON::R1);
     int r2trigger = CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_R);
     
-    bool PVC = // Choosse a button on the remote after more testing 
+    bool PVC = 0;// Choosse a button on the remote after more testing 
     
     int inch12  = CrcLib::ReadDigitalChannel(BUTTON::ARROW_RIGHT);
     int inch16 = CrcLib::ReadDigitalChannel(BUTTON::ARROW_LEFT);
@@ -70,14 +77,35 @@ void loop()
     if (j2xpos == 0 && j1ypos == 0 || l2trigger == -128 && r2trigger == -128) {
       done();
     }
-
-    // Tank drive forward-backward rotation (LF, BL, RF, BR) (Jacques)
-    if (l2trigger != -128 || r2trigger != -128) {
-      if (l2trigger < 120) {
-        turnl(CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_L));
+          
+    // Switch speed modes (potentiometer, low, medium, high, ultra-high)
+    if (l1analog != 0 || r1analog != 0) {
+      if (l1analog != 0) {
+        mode = mode - 1;
+        speed = modes[mode];                          
+      } else if (r1analog != 0) {
+        mode++;
+        speed = modes[mode];
+        }
       }
-      else if (r2trigger < -120) {
-        turnr(CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_R));
+
+    if (mode < 0 || mode > 4) {
+      if (mode < 0) {
+        mode = 4;
+        speed = modes[mode]; 
+        } else if (mode > 4) {
+          mode = 0;
+          speed = modes[mode];
+          }
+      }
+    
+    // Tank drive forward-backward rotation (LF, BL, RF, BR) (Jacques)
+   if (l2trigger != -128 || r2trigger != -128) {
+      if (l2trigger < -100) {
+        turnl(100);
+      }
+      else if (r2trigger < -100) {
+        turnr(100);
       }
     }
 
@@ -104,13 +132,13 @@ void loop()
       done();
       if (z > 500){
         if (armstate == HIGH){
-          CrcLib::SetPwmOutput(ARM1.A, 127);
-          CrcLib::SetPwmOutput(ARM1.B, -127);
+          CrcLib::SetPwmOutput(ARM1_A, 127);
+          CrcLib::SetPwmOutput(ARM1_B, -127);
           CrcLib::Update();
         }
-        else if (arm state == LOW){
-          CrcLib::SetPwmOutput(ARM1.A, -127);
-          CrcLib::SetPwmOutput(ARM1.B, 127);
+        else if (armstate == LOW){
+          CrcLib::SetPwmOutput(ARM1_A, -127);
+          CrcLib::SetPwmOutput(ARM1_B, 127);
           CrcLib::Update(); 
         }
         unsigned long x = millis();

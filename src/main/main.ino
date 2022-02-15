@@ -82,21 +82,17 @@ void loop()
     if (l1analog != 0 || r1analog != 0) {
       if (l1analog != 0) {
         mode = mode - 1;
+        if (mode < 0) {
+        mode = 0;
+        }
         speed = modes[mode];                          
       } else if (r1analog != 0) {
         mode++;
+        if (mode > 4) {
+          mode = 4;
+        }
         speed = modes[mode];
         }
-      }
-
-    if (mode < 0 || mode > 4) {
-      if (mode < 0) {
-        mode = 4;
-        speed = modes[mode]; 
-        } else if (mode > 4) {
-          mode = 0;
-          speed = modes[mode];
-          }
       }
     
     // Tank drive forward-backward rotation (LF, BL, RF, BR) (Jacques)

@@ -19,12 +19,11 @@ int speed = 0;
 
 int modes[] = {0, 25, 50, 100, 127}; // 4 modes: potentiometer (as 0), low, medium, high, ultra-high
 
-bool armstate = HIGH; 
+bool armstate = HIGH;
 
 unsigned long x = 0;
 
-void setup()
-{
+void setup() {
   CrcLib::Initialize();
   Serial.begin(9600);
 
@@ -42,13 +41,11 @@ void setup()
   CrcLib::InitializePwmOutput(Servo24inch);
 }
 
-void loop()
-{
+void loop() {
   CrcLib::Update();
   Serial.println();
 
-  if (CrcLib::IsCommValid())
-  {
+  if (CrcLib::IsCommValid()) {
     // Put ALL main code in here. This way, main.ino will only run if CrcConnect is online, connected and functional.
 
     speed = modes[mode];
@@ -64,20 +61,20 @@ void loop()
 
     int r1analog = CrcLib::ReadDigitalChannel(BUTTON::R1);
     int r2trigger = CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_R);
-    
-    bool PVC = 0;// Choosse a button on the remote after more testing 
-    
-    int inch12  = CrcLib::ReadDigitalChannel(BUTTON::ARROW_RIGHT);
+
+    int PVC = CrcLib::ReadDigitalChannel(BUTTON::SELECT); // Choosse a button on the remote after more testing 
+
+    int inch12 = CrcLib::ReadDigitalChannel(BUTTON::ARROW_RIGHT);
     int inch16 = CrcLib::ReadDigitalChannel(BUTTON::ARROW_LEFT);
     int inch24 = CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN);
 
     CrcLib::Update();
-    
+
     // END ALL TRANSMISSION FROM JOYSTICKS AND L2 R2 TRIGGERS
     if (j2xpos == 0 && j1ypos == 0 || l2trigger == -128 && r2trigger == -128) {
       done();
     }
-          
+
     // Switch speed modes (potentiometer, low, medium, high, ultra-high)
     if (l1analog != 0 || r1analog != 0) {
       if (l1analog != 0) {
@@ -94,48 +91,70 @@ void loop()
         speed = modes[mode];
         }
       }
-    
-    // Tank drive forward-backward rotation (LF, BL, RF, BR) (Jacques)
-   if (l2trigger != -128 || r2trigger != -128) {
-      if (l2trigger < -100) {
-        turnl(100);
-      }
-      else if (r2trigger < -100) {
-        turnr(100);
-      }
-    }
 
-    // Lateral movement/rotation (Thomas)
-    if (j1ypos != 0 || j1xpos != 0) {
+    if (mode == 0) {
+      // Tank drive forward-backward rotation (LF, BL, RF, BR) (Jacques)
+      if (l2trigger != -128 || r2trigger != -128) {
+        if (l2trigger > -110) {
+          turnl(CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_L));
+        } else if (r2trigger > -110) {
+          turnr(CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_R));
+        }
+      }
 
-      if (j1ypos < -126) {
-        forward(100);
-      }
-      else if (j1ypos > 126) {
-        backward(100);
-      }
-      if (j1xpos < -126) {
-        latl(100);
-      }
-      else if (j1xpos > 126) {
-        latr(100);
-      }
-    }
+      // Lateral movement/rotation (Thomas)
+      if (j1ypos != 0 || j1xpos != 0) {
 
-    if(PVC == 1) {
+        if (j1ypos > 10) { 
+          forward(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y));
+        } else if (j1ypos < -10) {
+          backward(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y));
+        }
+        if (j1xpos < -10) {
+          latl(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X));
+        } else if (j1xpos > 10) {
+          latr(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X));
+        }
+      }
+
+    } else {
+      // Tank drive forward-backward rotation (LF, BL, RF, BR) (Jacques)
+      if (l2trigger != -128 || r2trigger != -128) {
+        if (l2trigger < -100) {
+          turnl(speed);
+        } else if (r2trigger < -100) {
+          turnr(speed);
+        }
+      }
+
+      // Lateral movement/rotation (Thomas)
+      if (j1ypos != 0 || j1xpos != 0) {
+
+        if (j1ypos > 10) {
+          forward(speed);
+        } else if (j1ypos < -10) {
+          backward(speed);
+        }
+        if (j1xpos < -10) {
+          latl(speed);
+        } else if (j1xpos > 10) {
+          latr(speed);
+        }
+      }
+
+    } if (PVC == 1) {
       unsigned long y = millis();
       unsigned long z = y - x;
       done();
-      if (z > 500){
-        if (armstate == HIGH){
+      if (z > 500) {
+        if (armstate == HIGH) {
           CrcLib::SetPwmOutput(ARM1_A, 127);
           CrcLib::SetPwmOutput(ARM1_B, -127);
           CrcLib::Update();
-        }
-        else if (armstate == LOW){
+        } else if (armstate == LOW) {
           CrcLib::SetPwmOutput(ARM1_A, -127);
           CrcLib::SetPwmOutput(ARM1_B, 127);
-          CrcLib::Update(); 
+          CrcLib::Update();
         }
         unsigned long x = millis();
         CrcLib::Update();
@@ -146,8 +165,7 @@ void loop()
       CrcLib::SetPwmOutput(Servo12inch, 127);
       CrcLib::Update();
       Serial.println("New set servo");
-    }
-    else {
+    } else {
       CrcLib::SetPwmOutput(Servo12inch, -127);
       CrcLib::Update();
       Serial.println("No set");
@@ -157,8 +175,7 @@ void loop()
       CrcLib::SetPwmOutput(Servo16inch, 127);
       CrcLib::Update();
       Serial.println("New set servo");
-    }
-    else {
+    } else {
       CrcLib::SetPwmOutput(Servo16inch, -127);
       CrcLib::Update();
       Serial.println("No set");
@@ -168,20 +185,17 @@ void loop()
       CrcLib::SetPwmOutput(Servo24inch, 127);
       CrcLib::Update();
       Serial.println("New set servo");
-    }
-    else {
+    } else {
       CrcLib::SetPwmOutput(Servo24inch, -127);
       CrcLib::Update();
       Serial.println("No set");
     }
 
-  }
-  else {
+  } else {
     Serial.print("No controller connected, file will not work.");
     CrcLib::Update();
   }
 }
-
 
 void forward(int speed) {
   CrcLib::SetPwmOutput(LF, speed);

@@ -15,7 +15,7 @@ using namespace Crc;
 
 int mode = 0;
 
-int speed = 0;
+int vitess = 0;
 
 int modes[] = {0, 25, 50, 100, 127}; // 4 modes: potentiometer (as 0), low, medium, high, ultra-high
 
@@ -48,7 +48,7 @@ void loop() {
   if (CrcLib::IsCommValid()) {
     // Put ALL main code in here. This way, main.ino will only run if CrcConnect is online, connected and functional.
 
-    speed = modes[mode];
+    vitess = modes[mode];
 
     int j1xpos = CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X);
     int j1ypos = CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y);
@@ -82,13 +82,13 @@ void loop() {
         if (mode < 0) {
         mode = 4;
         }
-        speed = modes[mode];                          
+        vitess = modes[mode];                          
       } else if (r1analog != 0) {
         mode++;
         if (mode > 4) {
           mode = 0;
         }
-        speed = modes[mode];
+        vitess = modes[mode];
         }
       }
 
@@ -121,9 +121,9 @@ void loop() {
       // Tank drive forward-backward rotation (LF, BL, RF, BR) (Jacques)
       if (l2trigger != -128 || r2trigger != -128) {
         if (l2trigger < -100) {
-          turnl(speed);
+          turnl(vitess);
         } else if (r2trigger < -100) {
-          turnr(speed);
+          turnr(vitess);
         }
       }
 
@@ -131,14 +131,14 @@ void loop() {
       if (j1ypos != 0 || j1xpos != 0) {
 
         if (j1ypos > 10) {
-          forward(speed);
+          forward(vitess);
         } else if (j1ypos < -10) {
-          backward(speed);
+          backward(vitess);
         }
         if (j1xpos < -10) {
-          latl(speed);
+          latl(vitess);
         } else if (j1xpos > 10) {
-          latr(speed);
+          latr(vitess);
         }
       }
 
@@ -199,51 +199,51 @@ void loop() {
   }
 }
 
-void forward(int speed) {
-  CrcLib::SetPwmOutput(LF, speed);
-  CrcLib::SetPwmOutput(BL, speed);
-  CrcLib::SetPwmOutput(RF, -speed);
-  CrcLib::SetPwmOutput(BR, -speed);
+void forward(int t) {
+  CrcLib::SetPwmOutput(LF, t);
+  CrcLib::SetPwmOutput(BL, t);
+  CrcLib::SetPwmOutput(RF, -t);
+  CrcLib::SetPwmOutput(BR, -t);
   CrcLib::Update();
 }
 
-void backward(int speed) {
-  CrcLib::SetPwmOutput(LF, -speed);
-  CrcLib::SetPwmOutput(BL, -speed);
-  CrcLib::SetPwmOutput(RF, speed);
-  CrcLib::SetPwmOutput(BR, speed);
+void backward(int t) {
+  CrcLib::SetPwmOutput(LF, -t);
+  CrcLib::SetPwmOutput(BL, -t);
+  CrcLib::SetPwmOutput(RF, t);
+  CrcLib::SetPwmOutput(BR, t);
   CrcLib::Update();
 }
 
-void turnr(int speed) {
-  CrcLib::SetPwmOutput(LF, speed);
-  CrcLib::SetPwmOutput(BL, speed);
-  CrcLib::SetPwmOutput(RF, speed);
-  CrcLib::SetPwmOutput(BR, speed);
+void turnr(int t) {
+  CrcLib::SetPwmOutput(LF, t);
+  CrcLib::SetPwmOutput(BL, t);
+  CrcLib::SetPwmOutput(RF, t);
+  CrcLib::SetPwmOutput(BR, t);
   CrcLib::Update();
 }
 
-void turnl(int speed) {
-  CrcLib::SetPwmOutput(LF, -speed);
-  CrcLib::SetPwmOutput(BL, -speed);
-  CrcLib::SetPwmOutput(RF, -speed);
-  CrcLib::SetPwmOutput(BR, -speed);
+void turnl(int t) {
+  CrcLib::SetPwmOutput(LF, -t);
+  CrcLib::SetPwmOutput(BL, -t);
+  CrcLib::SetPwmOutput(RF, -t);
+  CrcLib::SetPwmOutput(BR, -t);
   CrcLib::Update();
 }
 
-void latr(int speed) {
-  CrcLib::SetPwmOutput(LF, speed);
-  CrcLib::SetPwmOutput(BL, -speed);
-  CrcLib::SetPwmOutput(RF, -speed);
-  CrcLib::SetPwmOutput(BR, speed);
+void latr(int t) {
+  CrcLib::SetPwmOutput(LF, t);
+  CrcLib::SetPwmOutput(BL, -t);
+  CrcLib::SetPwmOutput(RF, -t);
+  CrcLib::SetPwmOutput(BR, t);
   CrcLib::Update();
 }
 
-void latl(int speed) {
-  CrcLib::SetPwmOutput(LF, -speed);
-  CrcLib::SetPwmOutput(BL, speed);
-  CrcLib::SetPwmOutput(RF, speed);
-  CrcLib::SetPwmOutput(BR, -speed);
+void latl(int t) {
+  CrcLib::SetPwmOutput(LF, -t);
+  CrcLib::SetPwmOutput(BL, t);
+  CrcLib::SetPwmOutput(RF, t);
+  CrcLib::SetPwmOutput(BR, -t);
   CrcLib::Update();
 }
 

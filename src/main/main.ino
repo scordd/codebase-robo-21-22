@@ -80,13 +80,13 @@ void loop() {
       if (l1analog != 0) {
         mode = mode - 1;
         if (mode < 0) {
-        mode = 0;
+        mode = 4;
         }
         vitess = modes[mode];                          
       } else if (r1analog != 0) {
         mode++;
         if (mode > 4) {
-          mode = 4;
+          mode = 0;
         }
         vitess = modes[mode];
         }
@@ -148,12 +148,12 @@ void loop() {
       done();
       if (z > 500) {
         if (armstate == HIGH) {
-          CrcLib::SetPwmOutput(ARM1_A, speed);
-          CrcLib::SetPwmOutput(ARM1_B, speed);
+          CrcLib::SetPwmOutput(ARM1_A, 127);
+          CrcLib::SetPwmOutput(ARM1_B, -127);
           CrcLib::Update();
         } else if (armstate == LOW) {
-          CrcLib::SetPwmOutput(ARM1_A, speed);
-          CrcLib::SetPwmOutput(ARM1_B, speed);
+          CrcLib::SetPwmOutput(ARM1_A, -127);
+          CrcLib::SetPwmOutput(ARM1_B, 127);
           CrcLib::Update();
         }
         unsigned long x = millis();
@@ -162,31 +162,31 @@ void loop() {
     }
 
     if (inch12 == 1) {
-      CrcLib::SetPwmOutput(Servo12inch, speed);
+      CrcLib::SetPwmOutput(Servo12inch, 127);
       CrcLib::Update();
       Serial.println("New set servo");
     } else {
-      CrcLib::SetPwmOutput(Servo12inch, speed);
+      CrcLib::SetPwmOutput(Servo12inch, -127);
       CrcLib::Update();
       Serial.println("No set");
     }
 
     if (inch16 == 1) {
-      CrcLib::SetPwmOutput(Servo16inch, speed);
+      CrcLib::SetPwmOutput(Servo16inch, 127);
       CrcLib::Update();
       Serial.println("New set servo");
     } else {
-      CrcLib::SetPwmOutput(Servo16inch, speed);
+      CrcLib::SetPwmOutput(Servo16inch, -127);
       CrcLib::Update();
       Serial.println("No set");
     }
 
     if (inch24 == 1) {
-      CrcLib::SetPwmOutput(Servo24inch, speed);
+      CrcLib::SetPwmOutput(Servo24inch, 127);
       CrcLib::Update();
       Serial.println("New set servo");
     } else {
-      CrcLib::SetPwmOutput(Servo24inch, speed);
+      CrcLib::SetPwmOutput(Servo24inch, -127);
       CrcLib::Update();
       Serial.println("No set");
     }

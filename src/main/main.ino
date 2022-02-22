@@ -80,13 +80,13 @@ void loop() {
       if (l1analog != 0) {
         mode = mode - 1;
         if (mode < 0) {
-        mode = 4;
+        mode = 0;
         }
         vitess = modes[mode];                          
       } else if (r1analog != 0) {
         mode++;
         if (mode > 4) {
-          mode = 0;
+          mode = 4;
         }
         vitess = modes[mode];
         }

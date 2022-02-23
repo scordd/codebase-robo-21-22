@@ -200,18 +200,18 @@ void loop() {
 }
 
 void forward(int t) {
-  CrcLib::SetPwmOutput(LF, t);
-  CrcLib::SetPwmOutput(BL, t);
-  CrcLib::SetPwmOutput(RF, -t);
-  CrcLib::SetPwmOutput(BR, -t);
-  CrcLib::Update();
-}
-
-void backward(int t) {
   CrcLib::SetPwmOutput(LF, -t);
   CrcLib::SetPwmOutput(BL, -t);
   CrcLib::SetPwmOutput(RF, t);
   CrcLib::SetPwmOutput(BR, t);
+  CrcLib::Update();
+}
+
+void backward(int t) {
+  CrcLib::SetPwmOutput(LF, t);
+  CrcLib::SetPwmOutput(BL, t);
+  CrcLib::SetPwmOutput(RF, -t);
+  CrcLib::SetPwmOutput(BR, -t);
   CrcLib::Update();
 }
 

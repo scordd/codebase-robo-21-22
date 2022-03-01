@@ -17,7 +17,7 @@ int mode = 0;
 
 int vitesse = 0;
 
-int modes[] = {0, 25, 50, 100, 127}; // 4 modes: potentiometer (as 0), low, medium, high, ultra-high
+int modes[] = {25, 70, 127}; // 4 modes: potentiometer (as 0), low, medium, high, ultra-high
 
 bool armstate = HIGH;
 
@@ -68,6 +68,8 @@ void loop() {
     int inch16 = CrcLib::ReadDigitalChannel(BUTTON::ARROW_LEFT);
     int inch24 = CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN);
 
+    
+    
     CrcLib::Update();
 
     // END ALL TRANSMISSION FROM JOYSTICKS AND L2 R2 TRIGGERS
@@ -75,55 +77,28 @@ void loop() {
       done();
     }
 
-    // Switch speed modes (potentiometer, low, medium, high, ultra-high)
-    if (l1analog != 0 || r1analog != 0) {
-      if (l1analog != 0) {
-        mode = mode - 1;
-        if (mode < 0) {
-        mode = 4;
-        }
-        vitesse = modes[mode];                          
-      } else if (r1analog != 0) {
+
+    if (r1analog != 0) {
+        if (r1analog != 0) {
         mode++;
-        if (mode > 4) {
+        if (mode > 2) {
           mode = 0;
         }
         vitesse = modes[mode];
         }
+        wait(500);
       }
+    // Switch speed modes (potentiometer, low, medium, high)
+    
 
-    if (mode == 0) {
-      // Tank drive forward-backward rotation (LF, BL, RF, BR) (Jacques)
-      if (l2trigger != -128 || r2trigger != -128) {
-        if (l2trigger > -110) {
-          turnlanalog(CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_L));
-        } else if (r2trigger > -110) {
-          turnranalog(CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_R));
-        }
-      }
 
-      // Lateral movement/rotation (Thomas)
-      if (j1ypos != 0 || j1xpos != 0) {
 
-        if (j1ypos > 20) { 
-          forwardanalog(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y));
-        } else if (j1ypos < -20) {
-          backwardanalog(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y));
-        }
-        if (j1xpos < -20) {
-          latlanalog(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X));
-        } else if (j1xpos > 20) {
-          latranalog(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X));
-        }
-      }
-
-    } else {
       // Tank drive forward-backward rotation (LF, BL, RF, BR) (Jacques)
       if (l2trigger != -128 || r2trigger != -128) {
         if (l2trigger < -100) {
-          turnl(vitesse);
-        } else if (r2trigger < -100) {
           turnr(vitesse);
+        } else if (r2trigger < -100) {
+          turnl(vitesse);
         }
       }
 
@@ -191,8 +166,7 @@ void loop() {
       Serial.println("No set");
     }
       
-    } 
-
+    done();
   } else {
     Serial.print("No controller connected, file will not work.");
     CrcLib::Update();

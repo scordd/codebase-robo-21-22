@@ -10,7 +10,6 @@ This year, we are implementing the XBee module framework to the codebase, notabl
 - The code for the controller and receiver
 - The removal of automation from last year
 
-*For devs:* https://github.com/scordd/codebase-robo-21-22/projects/1
 - ```src``` is meant for the final code to be run during the competition.
 
 - ```debug``` is for debug. Duh. 

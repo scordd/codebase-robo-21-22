@@ -17,7 +17,7 @@ int mode = 0;
 
 int vitesse = 0;
 
-int modes[] = {25, 70, 127}; // 4 modes: potentiometer (as 0), low, medium, high, ultra-high
+int modes[] = {0, 25, 70, 127}; // 4 modes: potentiometer (as 0), low, medium, high, ultra-high
 
 bool armstate = HIGH;
 
@@ -77,27 +77,58 @@ void loop() {
       done();
     }
 
-
-    if (r1analog != 0) {
-        if (r1analog != 0) {
+    // Switch speed modes (potentiometer, low, medium, high)
+    if (l1analog != 0 || r1analog != 0) {
+        if (l1analog != 0) {
+        mode = mode - 1;
+        if (mode < 0) {
+          mode = 3;
+        }
+        vitesse = modes[mode];
+        wait(500);
+        
+      } else if(r1analog != 0){
         mode++;
-        if (mode > 2) {
+        if (mode > 3) {
           mode = 0;
         }
         vitesse = modes[mode];
-        }
         wait(500);
+        } 
       }
-    // Switch speed modes (potentiometer, low, medium, high)
-    
 
-
+ if (mode == 0) {
 
       // Tank drive forward-backward rotation (LF, BL, RF, BR) (Jacques)
       if (l2trigger != -128 || r2trigger != -128) {
-        if (l2trigger < -100) {
+        if (r2trigger < -100) {
+          turnranalog(CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_R));
+        } else if (l2trigger < -100) {
+          turnlanalog(CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_L));
+        }
+      }
+
+      // Lateral movement/rotation (Thomas)
+      if (j1ypos != 0 || j1xpos != 0) {
+
+        if (j1ypos > 20) {
+          forwardanalog(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y));
+        } else if (j1ypos < -20) {
+          backwardanalog(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y));
+        }
+        if (j1xpos < -20) {
+          latlanalog(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X));
+        } else if (j1xpos > 20) {
+          latranalog(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X));
+        }
+      }
+
+ } else {
+        // Tank drive forward-backward rotation (LF, BL, RF, BR) (Jacques)
+      if (l2trigger != -128 || r2trigger != -128) {
+        if (r2trigger < -100) {
           turnr(vitesse);
-        } else if (r2trigger < -100) {
+        } else if (l2trigger < -100) {
           turnl(vitesse);
         }
       }
@@ -111,11 +142,14 @@ void loop() {
           backward(vitesse);
         }
         if (j1xpos < -20) {
-          latl(vitesse);
+          latl(50);
         } else if (j1xpos > 20) {
-          latr(vitesse);
+          latr(50);
         }
       }
+  }
+
+
 
     if (PVC == 1) {
       unsigned long y = millis();
@@ -189,16 +223,16 @@ void turnlanalog(int t) {
 }
 
 void forwardanalog(int t) {
-  CrcLib::SetPwmOutput(LF, -t);
-  CrcLib::SetPwmOutput(BL, -t);
+  CrcLib::SetPwmOutput(LF, t);
+  CrcLib::SetPwmOutput(BL, t);
   CrcLib::SetPwmOutput(RF, t);
   CrcLib::SetPwmOutput(BR, t);
   CrcLib::Update();
 }
 
 void backwardanalog(int t) {
-  CrcLib::SetPwmOutput(LF, t);
-  CrcLib::SetPwmOutput(BL, t);
+  CrcLib::SetPwmOutput(LF, -t);
+  CrcLib::SetPwmOutput(BL, -t);
   CrcLib::SetPwmOutput(RF, -t);
   CrcLib::SetPwmOutput(BR, -t);
   CrcLib::Update();
@@ -221,16 +255,16 @@ void latlanalog(int t) {
 }
 
 void forward(int vitesse) {
-  CrcLib::SetPwmOutput(LF, -vitesse);
-  CrcLib::SetPwmOutput(BL, -vitesse);
+  CrcLib::SetPwmOutput(LF, vitesse);
+  CrcLib::SetPwmOutput(BL, vitesse);
   CrcLib::SetPwmOutput(RF, vitesse);
   CrcLib::SetPwmOutput(BR, vitesse);
   CrcLib::Update();
 }
 
 void backward(int vitesse) {
-  CrcLib::SetPwmOutput(LF, vitesse);
-  CrcLib::SetPwmOutput(BL, vitesse);
+  CrcLib::SetPwmOutput(LF, -vitesse);
+  CrcLib::SetPwmOutput(BL, -vitesse);
   CrcLib::SetPwmOutput(RF, -vitesse);
   CrcLib::SetPwmOutput(BR, -vitesse);
   CrcLib::Update();

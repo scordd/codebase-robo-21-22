@@ -13,7 +13,7 @@ This year, we are implementing the XBee module framework to the codebase, notabl
 *For devs:* https://github.com/scordd/codebase-robo-21-22/projects/1
 - ```src``` is meant for the final code to be run during the competition.
 
-- ```tests``` is everything else that isn't final. Functions, libraries, and scripting tests.
+- ```debug``` is for debug. Duh. 
 
 - ```archive``` is last year's scripts. For reference purposes.
 

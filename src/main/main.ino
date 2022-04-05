@@ -4,12 +4,8 @@
 #define RF CRC_PWM_2
 #define BL CRC_PWM_3
 #define BR CRC_PWM_4
-#define ARM1_A CRC_PWM_10
-#define ARM1_B CRC_PWM_11
-#define ARM2 CRC_PWM_6
-#define Servo12inch CRC_PWM_7
-#define Servo16inch CRC_PWM_8
-#define Servo24inch CRC_PWM_9
+#define ARM CRC_PWM_5
+#define DISPENSER CRC_PWM_7
 
 using namespace Crc;
 
@@ -32,13 +28,9 @@ void setup() {
   CrcLib::InitializePwmOutput(BL);
   CrcLib::InitializePwmOutput(BR);
 
-  CrcLib::InitializePwmOutput(ARM1_A);
-  CrcLib::InitializePwmOutput(ARM1_B);
-  CrcLib::InitializePwmOutput(ARM2);
+  CrcLib::InitializePwmOutput(ARM);
 
-  CrcLib::InitializePwmOutput(Servo12inch);
-  CrcLib::InitializePwmOutput(Servo16inch);
-  CrcLib::InitializePwmOutput(Servo24inch);
+  CrcLib::InitializePwmOutput(DISPENSER);
 }
 
 void loop() {
@@ -56,30 +48,29 @@ void loop() {
     int j2xpos = CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK2_X);
     int j2ypos = CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK2_Y);
 
-    int l1analog = CrcLib::ReadDigitalChannel(BUTTON::L1);
+    int select = CrcLib::ReadDigitalChannel(BUTTON::SELECT);
+    int start = CrcLib::ReadDigitalChannel(BUTTON::START);
+    
     int l2trigger = CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_L);
-
-    int r1analog = CrcLib::ReadDigitalChannel(BUTTON::R1);
     int r2trigger = CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_R);
 
-    int PVC = CrcLib::ReadDigitalChannel(BUTTON::SELECT); // Choosse a button on the remote after more testing 
+    int dispenser = CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN);
 
-    int inch12 = CrcLib::ReadDigitalChannel(BUTTON::ARROW_RIGHT);
-    int inch16 = CrcLib::ReadDigitalChannel(BUTTON::ARROW_LEFT);
-    int inch24 = CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN);
+    int backwardArm = CrcLib::ReadDigitalChannel(BUTTON::L1);
+    int forwardArm = CrcLib::ReadDigitalChannel(BUTTON::R1);
 
     
     
     CrcLib::Update();
 
     // END ALL TRANSMISSION FROM JOYSTICKS AND L2 R2 TRIGGERS
-    if (j2xpos == 0 && j1ypos == 0 || l2trigger == -128 && r2trigger == -128) {
+    if (j2xpos == 0 && j1ypos == 0 || l2trigger == -128 && r2trigger == -128 || arm == false && arm2 == false) {
       done();
     }
 
     // Switch speed modes (potentiometer, low, medium, high)
-    if (l1analog != 0 || r1analog != 0) {
-        if (l1analog != 0) {
+    if (select != 0 || start != 0) {
+        if (select != 0) {
         mode = mode - 1;
         if (mode < 0) {
           mode = 3;
@@ -87,7 +78,7 @@ void loop() {
         vitesse = modes[mode];
         wait(500);
         
-      } else if(r1analog != 0){
+      } else if(start != 0){
         mode++;
         if (mode > 3) {
           mode = 0;
@@ -147,58 +138,37 @@ void loop() {
           latr(50);
         }
       }
-  }
+ }
 
-
-
-    if (PVC == 1) {
-      unsigned long y = millis();
-      unsigned long z = y - x;
-      done();
-      if (z > 500) {
-        if (armstate == HIGH) {
-          CrcLib::SetPwmOutput(ARM1_A, 127);
-          CrcLib::SetPwmOutput(ARM1_B, -127);
-          CrcLib::Update();
-        } else if (armstate == LOW) {
-          CrcLib::SetPwmOutput(ARM1_A, -127);
-          CrcLib::SetPwmOutput(ARM1_B, 127);
-          CrcLib::Update();
+    // new arm code (still needs to be revised by another person + tested)
+    if (backwardArm == true || forwardArm == true) {
+      if (backwardArm == true) {
+        CrcLib::SetPwmOutput(ARM, -127);
         }
-        unsigned long x = millis();
+      if (forwardArm == true) {
+        CrcLib::SetPwmOutput(ARM, 127);
+        }
         CrcLib::Update();
       }
-    }
 
-    if (inch12 == 1) {
-      CrcLib::SetPwmOutput(Servo12inch, 127);
+
+    // dispenser code (needs to be tested)
+    if (dispenser == 1) {
+      for (int i; int < 2000; i++) {
+        CrcLib::SetPwmOutput(DISPENSER, 127);
+        }
+        CrcLib::Update();
+      for (int i; int < 2000; i++) {
+        CrcLib::SetPwmOutput(DISPENSER, -127);
+        }
+
+        CrcLib::SetPwmOutput(DISPENSER, 0);
+      }
+
+
       CrcLib::Update();
       Serial.println("New set servo");
-    } else {
-      CrcLib::SetPwmOutput(Servo12inch, -127);
-      CrcLib::Update();
-      Serial.println("No set");
-    }
 
-    if (inch16 == 1) {
-      CrcLib::SetPwmOutput(Servo16inch, 127);
-      CrcLib::Update();
-      Serial.println("New set servo");
-    } else {
-      CrcLib::SetPwmOutput(Servo16inch, -127);
-      CrcLib::Update();
-      Serial.println("No set");
-    }
-
-    if (inch24 == 1) {
-      CrcLib::SetPwmOutput(Servo24inch, 127);
-      CrcLib::Update();
-      Serial.println("New set servo");
-    } else {
-      CrcLib::SetPwmOutput(Servo24inch, -127);
-      CrcLib::Update();
-      Serial.println("No set");
-    }
       
     done();
   } else {
@@ -307,6 +277,7 @@ void done() {
   CrcLib::SetPwmOutput(BL, 0);
   CrcLib::SetPwmOutput(RF, 0);
   CrcLib::SetPwmOutput(BR, 0);
+  CrcLib::SetPwmOutput(ARM, 0);
   CrcLib::Update();
 }
 

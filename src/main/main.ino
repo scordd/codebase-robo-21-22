@@ -5,7 +5,8 @@
 #define BL CRC_PWM_3
 #define BR CRC_PWM_4
 #define ARM CRC_PWM_5
-#define DISPENSER CRC_PWM_7
+#define tophatch CRC_PWM_7
+#define bothatch CRC_PWM_8
 
 using namespace Crc;
 
@@ -14,6 +15,8 @@ int mode = 0;
 int vitesse = 0;
 
 int modes[] = {0, 25, 70, 127}; // 4 modes: potentiometer (as 0), low, medium, high, ultra-high
+
+int ballstatus = 0;
 
 bool armstate = HIGH;
 
@@ -54,8 +57,9 @@ void loop() {
     int l2trigger = CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_L);
     int r2trigger = CrcLib::ReadAnalogChannel(ANALOG::GACHETTE_R);
 
-    int dispenser = CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN);
-
+    int individual = CrcLib::ReadDigitalChannel(BUTTON::ARROW_UP);
+    int full = CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN);
+    
     int backwardArm = CrcLib::ReadDigitalChannel(BUTTON::L1);
     int forwardArm = CrcLib::ReadDigitalChannel(BUTTON::R1);
 
@@ -151,19 +155,52 @@ void loop() {
         CrcLib::Update();
       }
 
-
-    // dispenser code (needs to be tested)
-    if (dispenser == 1) {
-      for (int i; int < 2000; i++) {
-        CrcLib::SetPwmOutput(DISPENSER, 127);
-        }
+    if(individual == HIGH){
+      CrcLib::SetPwmOutput(bothatch, 127);
+      wait(500);
+      CrcLib::SetPwmOutput(bothatch, 0);
+      wait(1000);
+      CrcLib::SetPwmOutput(bothatch, -127);
+      wait(500);
+      CrcLib::SetPwmOutput(bothatch, 0);
+      ballstatus = 0;
+      CrcLib::Update();
+    }
+    
+    if(full == HIGH){
+      CrcLib::SetPwmOutput(tophatch, -127);
+      CrcLib::SetPwmOutput(bothatch, 127);
+      wait(500);
+      while(full == HIGH){
+        CrcLib::SetPwmOutput(tophatch, 0);
+        CrcLib::SetPwmOutput(bothatch, 0);
         CrcLib::Update();
-      for (int i; int < 2000; i++) {
-        CrcLib::SetPwmOutput(DISPENSER, -127);
-        }
-
-        CrcLib::SetPwmOutput(DISPENSER, 0);
+        full = CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN);
+        CrcLib::Update();
       }
+      CrcLib::SetPwmOutput(tophatch, 127);
+      wait(250);
+      CrcLib::SetPwmOutput(bothatch, -127);
+      wait(250);
+      CrcLib::SetPwmOutput(tophatch, 0);
+      wait(250);
+      CrcLib::SetPwmOutput(bothatch, 0);
+      ballstatus = 0;
+    }
+    
+    // dispenser code (needs to be tested)
+    if (ballstatus = 0){
+      CrcLib::SetPwmOutput(tophatch, -127);
+      wait(500);
+      CrcLib::SetPwmOutput(tophatch, 0);
+      wait(1000);
+      CrcLib::SetPwmOutput(tophatch, 127);
+      wait(500);
+      CrcLib::SetPwmOutput(tophatch, 0);
+      CrcLib::Update();
+      ballstatus = 1;
+    }
+    
 
 
       CrcLib::Update();

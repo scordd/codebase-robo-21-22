@@ -5,8 +5,12 @@
 #define BL CRC_PWM_3
 #define BR CRC_PWM_4
 #define ARM CRC_PWM_5
-#define tophatch CRC_PWM_7
-#define bothatch CRC_PWM_8
+#define TOPHATCH CRC_DIG_11
+#define BOTHATCH CRC_DIG_12
+#define IN1 CRC_DIG_1
+#define IN2 CRC_DIG_2
+#define IN3 CRC_DIG_3
+#define IN4 CRC_DIG_4
 
 using namespace Crc;
 
@@ -33,7 +37,13 @@ void setup() {
 
   CrcLib::InitializePwmOutput(ARM);
 
-  CrcLib::InitializePwmOutput(DISPENSER);
+  CrcLib::SetDigitalPinMode(TOPHATCH, OUTPUT);
+  CrcLib::SetDigitalPinMode(BOTHATCH, OUTPUT);
+  CrcLib::SetDigitalPinMode(IN1, OUTPUT);
+  CrcLib::SetDigitalPinMode(IN2, OUTPUT);
+  CrcLib::SetDigitalPinMode(IN3, OUTPUT);
+  CrcLib::SetDigitalPinMode(IN4, OUTPUT);
+
 }
 
 void loop() {
@@ -68,7 +78,7 @@ void loop() {
     CrcLib::Update();
 
     // END ALL TRANSMISSION FROM JOYSTICKS AND L2 R2 TRIGGERS
-    if (j2xpos == 0 && j1ypos == 0 || l2trigger == -128 && r2trigger == -128 || arm == false && arm2 == false) {
+    if (j2xpos == 0 && j1ypos == 0 || l2trigger == -128 && r2trigger == -128) {
       done();
     }
 
@@ -156,47 +166,47 @@ void loop() {
       }
 
     if(individual == HIGH){
-      CrcLib::SetPwmOutput(bothatch, 127);
+      botopen();
       wait(500);
-      CrcLib::SetPwmOutput(bothatch, 0);
+      botstop();
       wait(1000);
-      CrcLib::SetPwmOutput(bothatch, -127);
+      botclose();
       wait(500);
-      CrcLib::SetPwmOutput(bothatch, 0);
+      botstop();
       ballstatus = 0;
       CrcLib::Update();
     }
     
     if(full == HIGH){
-      CrcLib::SetPwmOutput(tophatch, -127);
-      CrcLib::SetPwmOutput(bothatch, 127);
+      topopen();
+      botopen();
       wait(500);
       while(full == HIGH){
-        CrcLib::SetPwmOutput(tophatch, 0);
-        CrcLib::SetPwmOutput(bothatch, 0);
+        topstop();
+        botstop();
         CrcLib::Update();
         full = CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN);
         CrcLib::Update();
       }
-      CrcLib::SetPwmOutput(tophatch, 127);
+      topclose();
       wait(250);
-      CrcLib::SetPwmOutput(bothatch, -127);
+      botclose();
       wait(250);
-      CrcLib::SetPwmOutput(tophatch, 0);
+      topstop();
       wait(250);
-      CrcLib::SetPwmOutput(bothatch, 0);
+      botstop();
       ballstatus = 0;
     }
     
     // dispenser code (needs to be tested)
     if (ballstatus = 0){
-      CrcLib::SetPwmOutput(tophatch, -127);
+      topopen();
       wait(500);
-      CrcLib::SetPwmOutput(tophatch, 0);
+      topstop();
       wait(1000);
-      CrcLib::SetPwmOutput(tophatch, 127);
+      topclose();
       wait(500);
-      CrcLib::SetPwmOutput(tophatch, 0);
+      topstop();
       CrcLib::Update();
       ballstatus = 1;
     }
@@ -342,3 +352,42 @@ void waitfast(int a) {
 
 };
 // Functions here? Or maybe a library....
+
+
+void topopen(){
+  CrcLib::SetDigitalOutput(TOPHATCH, HIGH);
+  CrcLib::SetDigitalOutput(IN1, HIGH);
+  CrcLib::SetDigitalOutput(IN2, LOW);
+  CrcLib::Update();
+  }
+
+void topclose() {
+  CrcLib::SetDigitalOutput(TOPHATCH, HIGH);
+  CrcLib::SetDigitalOutput(IN1, LOW);
+  CrcLib::SetDigitalOutput(IN2, HIGH);
+  CrcLib::Update();
+  }
+
+void topstop(){
+  CrcLib::SetDigitalOutput(TOPHATCH, LOW);
+  CrcLib::Update();
+  }
+  
+void botopen() {
+  CrcLib::SetDigitalOutput(BOTHATCH, HIGH);
+  CrcLib::SetDigitalOutput(IN3, HIGH);
+  CrcLib::SetDigitalOutput(IN4, LOW);
+  CrcLib::Update();
+  }
+
+void botclose() {
+  CrcLib::SetDigitalOutput(BOTHATCH, HIGH);
+  CrcLib::SetDigitalOutput(IN3, LOW);
+  CrcLib::SetDigitalOutput(IN4, HIGH);
+  CrcLib::Update();
+  }
+
+void botstop(){
+  CrcLib::SetDigitalOutput(BOTHATCH, LOW);
+  CrcLib::Update();
+  }

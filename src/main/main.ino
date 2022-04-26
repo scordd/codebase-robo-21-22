@@ -157,21 +157,25 @@ void loop() {
     // new arm code (still needs to be revised by another person + tested)
     if (backwardArm == true || forwardArm == true) {
       if (backwardArm == true) {
-        CrcLib::SetPwmOutput(ARM, -127);
+        CrcLib::SetPwmOutput(ARM, 20);
+        wait(700);
+        CrcLib::SetPwmOutput(ARM, 0);
         }
       if (forwardArm == true) {
-        CrcLib::SetPwmOutput(ARM, 127);
+        CrcLib::SetPwmOutput(ARM, -80);
+        wait(500);
+        CrcLib::SetPwmOutput(ARM, -10);
         }
         CrcLib::Update();
       }
 
     if(individual == HIGH){
       botopen();
-      wait(500);
+      wait(1600);
       botstop();
-      wait(1000);
+      wait(5000);
       botclose();
-      wait(500);
+      wait(2500);
       botstop();
       ballstatus = 0;
       CrcLib::Update();
@@ -180,7 +184,7 @@ void loop() {
     if(full == HIGH){
       topopen();
       botopen();
-      wait(500);
+      wait(1600);
       while(full == HIGH){
         topstop();
         botstop();
@@ -189,23 +193,23 @@ void loop() {
         CrcLib::Update();
       }
       topclose();
-      wait(250);
+      wait(1000);
       botclose();
-      wait(250);
+      wait(1500);
       topstop();
-      wait(250);
+      wait(1000);
       botstop();
       ballstatus = 0;
     }
     
     // dispenser code (needs to be tested)
-    if (ballstatus = 0){
+    if (ballstatus == 0){
       topopen();
-      wait(500);
+      wait(1600);
       topstop();
-      wait(1000);
+      wait(2000);
       topclose();
-      wait(500);
+      wait(2500);
       topstop();
       CrcLib::Update();
       ballstatus = 1;
@@ -324,7 +328,6 @@ void done() {
   CrcLib::SetPwmOutput(BL, 0);
   CrcLib::SetPwmOutput(RF, 0);
   CrcLib::SetPwmOutput(BR, 0);
-  CrcLib::SetPwmOutput(ARM, 0);
   CrcLib::Update();
 }
 
@@ -356,15 +359,15 @@ void waitfast(int a) {
 
 void topopen(){
   CrcLib::SetDigitalOutput(TOPHATCH, HIGH);
-  CrcLib::SetDigitalOutput(IN1, HIGH);
-  CrcLib::SetDigitalOutput(IN2, LOW);
+  CrcLib::SetDigitalOutput(IN1, LOW);
+  CrcLib::SetDigitalOutput(IN2, HIGH);
   CrcLib::Update();
   }
 
 void topclose() {
   CrcLib::SetDigitalOutput(TOPHATCH, HIGH);
-  CrcLib::SetDigitalOutput(IN1, LOW);
-  CrcLib::SetDigitalOutput(IN2, HIGH);
+  CrcLib::SetDigitalOutput(IN1, HIGH);
+  CrcLib::SetDigitalOutput(IN2, LOW);
   CrcLib::Update();
   }
 
@@ -375,15 +378,15 @@ void topstop(){
   
 void botopen() {
   CrcLib::SetDigitalOutput(BOTHATCH, HIGH);
-  CrcLib::SetDigitalOutput(IN3, HIGH);
-  CrcLib::SetDigitalOutput(IN4, LOW);
+  CrcLib::SetDigitalOutput(IN3, LOW);
+  CrcLib::SetDigitalOutput(IN4, HIGH);
   CrcLib::Update();
   }
 
 void botclose() {
   CrcLib::SetDigitalOutput(BOTHATCH, HIGH);
-  CrcLib::SetDigitalOutput(IN3, LOW);
-  CrcLib::SetDigitalOutput(IN4, HIGH);
+  CrcLib::SetDigitalOutput(IN3, HIGH);
+  CrcLib::SetDigitalOutput(IN4, LOW);
   CrcLib::Update();
   }
 

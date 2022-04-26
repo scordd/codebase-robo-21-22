@@ -121,10 +121,10 @@ void loop() {
         } else if (j1ypos < -20) {
           backwardanalog(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y));
         }
-        if (j1xpos < -20) {
-          latlanalog(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X));
+         if (j1xpos < -20) {
+          latl(50);
         } else if (j1xpos > 20) {
-          latranalog(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X));
+          latr(50);
         }
       }
 
@@ -255,22 +255,6 @@ void backwardanalog(int t) {
   CrcLib::SetPwmOutput(LF, -t);
   CrcLib::SetPwmOutput(BL, -t);
   CrcLib::SetPwmOutput(RF, -t);
-  CrcLib::SetPwmOutput(BR, -t);
-  CrcLib::Update();
-}
-
-void latranalog(int t) {
-  CrcLib::SetPwmOutput(LF, t);
-  CrcLib::SetPwmOutput(BL, -t);
-  CrcLib::SetPwmOutput(RF, -t);
-  CrcLib::SetPwmOutput(BR, t);
-  CrcLib::Update();
-}
-
-void latlanalog(int t) {
-  CrcLib::SetPwmOutput(LF, -t);
-  CrcLib::SetPwmOutput(BL, t);
-  CrcLib::SetPwmOutput(RF, t);
   CrcLib::SetPwmOutput(BR, -t);
   CrcLib::Update();
 }

@@ -5,6 +5,7 @@
 #define BL CRC_PWM_3
 #define BR CRC_PWM_4
 #define ARM CRC_PWM_5
+#define ELEVATOR CRC_PWM_6
 #define TOPHATCH CRC_DIG_11
 #define BOTHATCH CRC_DIG_12
 #define IN1 CRC_DIG_1
@@ -73,7 +74,7 @@ void loop() {
     int backwardArm = CrcLib::ReadDigitalChannel(BUTTON::L1);
     int forwardArm = CrcLib::ReadDigitalChannel(BUTTON::R1);
 
-    
+    int ele = CrcLib::ReadDigitalChannel(BUTTON::COLORS_LEFT);
     
     CrcLib::Update();
 
@@ -169,6 +170,14 @@ void loop() {
         CrcLib::Update();
       }
 
+      if (ele == true) {
+        CrcLib::SetPwmOutput(ELEVATOR, 60);
+        wait(3000);
+        CrcLib::SetPwmOutput(ELEVATOR, -60);
+        wait(3000);
+        CrcLib::Update();
+        }
+
     if(individual == HIGH){
       botopen();
       wait(1600);
@@ -230,16 +239,16 @@ void loop() {
 void turnranalog(int t) {
   CrcLib::SetPwmOutput(LF, t);
   CrcLib::SetPwmOutput(BL, t);
-  CrcLib::SetPwmOutput(RF, t);
-  CrcLib::SetPwmOutput(BR, t);
+  CrcLib::SetPwmOutput(RF, -t);
+  CrcLib::SetPwmOutput(BR, -t);
   CrcLib::Update();
 }
 
 void turnlanalog(int t) {
   CrcLib::SetPwmOutput(LF, -t);
   CrcLib::SetPwmOutput(BL, -t);
-  CrcLib::SetPwmOutput(RF, -t);
-  CrcLib::SetPwmOutput(BR, -t);
+  CrcLib::SetPwmOutput(RF, t);
+  CrcLib::SetPwmOutput(BR, t);
   CrcLib::Update();
 }
 
@@ -278,16 +287,16 @@ void backward(int vitesse) {
 void turnr(int vitesse) {
   CrcLib::SetPwmOutput(LF, vitesse);
   CrcLib::SetPwmOutput(BL, vitesse);
-  CrcLib::SetPwmOutput(RF, vitesse);
-  CrcLib::SetPwmOutput(BR, vitesse);
+  CrcLib::SetPwmOutput(RF, -vitesse);
+  CrcLib::SetPwmOutput(BR, -vitesse);
   CrcLib::Update();
 }
 
 void turnl(int vitesse) {
   CrcLib::SetPwmOutput(LF, -vitesse);
   CrcLib::SetPwmOutput(BL, -vitesse);
-  CrcLib::SetPwmOutput(RF, -vitesse);
-  CrcLib::SetPwmOutput(BR, -vitesse);
+  CrcLib::SetPwmOutput(RF, vitesse);
+  CrcLib::SetPwmOutput(BR, vitesse);
   CrcLib::Update();
 }
 

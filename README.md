@@ -1,26 +1,7 @@
 ### CRC Arcanum 2021 - 2022 Codebase &middot; ![Discord](https://img.shields.io/discord/905584348739280968?label=Discord) &middot; ![Commits](https://img.shields.io/github/commit-activity/m/scordd/codebase-robo-21-22?label=Commit%20Activity)
 
 Welcome to this year's codebase for the CRC Arcanum 2021-2022 games.
-Last year's code was messy, unorganized, and generally crappy. We're making some improvements this year, notably:
-- Making the switch from the incomplete Arduino IDE to PlatformIO
-- Implementing Git and Github CLI into our workflows
-- We've also acquired 3 new Linux systems to aid in the development of the robot
 
-This year, we are implementing the XBee module framework to the codebase, notably;
-- The code for the controller and receiver
-- The removal of automation from last year
-
-- ```src``` is meant for the final code to be run during the competition.
-
-- ```debug``` is for debug. Duh. 
-
-- ```archive``` is last year's scripts. For reference purposes.
-
-> ⛔️ This is not a complete codebase. If you do use it, you agree to use it at your own risk.
->  This code is meant for our own use, so we don't recommend other people using it.
->  
->  This code is specific to the CRCduino and **WILL NOT** work with any other Arduino.
-
-**More to come soon.**
+The competition has completed, thanks for a great year!
 
 https://robo-crc.ca/arcanum-2022/
